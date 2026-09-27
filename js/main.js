@@ -116,16 +116,20 @@
   }
 
   /* ------------------------------------------------------------------
-     Boot sequence
+     Boot sequence — J.A.R.V.I.S. suit initialization
   ------------------------------------------------------------------ */
   const boot = $('#boot');
+  const HUD = window.MK1;
   const seenBoot = (() => { try { return sessionStorage.getItem('mk1-boot') === '1'; } catch (_) { return false; } })();
   let bootDone = false;
 
   const heroIntro = () => {
-    if (!hasGSAP) return;
+    if (!hasGSAP) { window.dispatchEvent(new CustomEvent('mk1:booted')); return; }
     const canvasOpacity = isNarrow() ? 0.7 : 1;
-    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+    const tl = gsap.timeline({
+      defaults: { ease: 'power4.out' },
+      onComplete: () => window.dispatchEvent(new CustomEvent('mk1:booted')),
+    });
     tl.to('.hero__canvas', { opacity: canvasOpacity, duration: 1.8, ease: 'power2.out' }, 0)
       .to('.char', {
         yPercent: 0, duration: 1.2, stagger: 0.07,
@@ -133,53 +137,157 @@
       }, 0.1)
       .to('.nav', { opacity: 1, y: 0, duration: 0.9 }, 0.4)
       .to('[data-hero]', { opacity: 1, y: 0, duration: 1, stagger: 0.09 }, 0.5)
-      .to('.hud', { opacity: 1, duration: 0.9, stagger: 0.08 }, 0.9);
+      .to('.hud', { opacity: 1, duration: 0.9, stagger: 0.08 }, 0.9)
+      .to('.hero__hud', { opacity: 1, duration: 1.4, ease: 'power2.out' }, 0.7);
   };
 
-  const finishBoot = () => {
+  const finishBoot = (fast) => {
     if (bootDone) return;
     bootDone = true;
     try { sessionStorage.setItem('mk1-boot', '1'); } catch (_) { /* ignore */ }
     if (lenis) lenis.start();
     if (!boot) { heroIntro(); return; }
-    if (!hasGSAP) { boot.remove(); return; }
-    gsap.to(boot, {
-      clipPath: 'inset(0% 0% 100% 0%)',
-      duration: 0.9,
-      ease: 'power4.inOut',
-      onStart: heroIntro,
-      onComplete: () => boot.remove(),
-    });
+    if (!hasGSAP) { boot.remove(); heroIntro(); return; }
+    if (HUD && HUD.audio.enabled) HUD.audio.confirm();
+    const d = fast ? 0.6 : 1;
+    boot.classList.add('is-locked');
+    const tl = gsap.timeline({ onComplete: () => boot.remove() });
+    tl.to('.boot__flash', { opacity: 0.92, duration: 0.14, ease: 'power2.in' }, 0.28 * d)
+      .to('.boot__flash', { opacity: 0, duration: 0.6, ease: 'power2.out' })
+      .to('.boot__stage', { opacity: 0, scale: 1.14, duration: 0.55 * d, ease: 'power3.in' }, 0.32 * d)
+      .to('.boot__corner', { opacity: 0, duration: 0.3 }, 0.5 * d)
+      .to('.boot__visor--top', { yPercent: -100, duration: 1 * d, ease: 'power4.inOut', onStart: heroIntro }, 0.62 * d)
+      .to('.boot__visor--bottom', { yPercent: 100, duration: 1 * d, ease: 'power4.inOut' }, 0.62 * d);
   };
 
   const runBoot = () => {
     if (!boot) { heroIntro(); return; }
-    if (!hasGSAP) { boot.remove(); return; }
+    if (!hasGSAP || !HUD) { boot.remove(); heroIntro(); return; }
     if (lenis) lenis.stop();
     window.scrollTo(0, 0);
 
-    const lines = $$('.boot__line', boot);
-    const ring = $('#boot-ring');
+    const quick = seenBoot;
+    const dur = quick ? 1.4 : 4.4;
+
+    // Ring assembly
+    const rings = $('#boot-rings');
+    rings && HUD.buildRings(rings, [
+      { type: 'circle', r: 206, w: 1, opacity: 0.22 },
+      { type: 'ticks', r: 192, n: 120, len: 6, w: 1, every: 10, spin: 'cw', speed: 90 },
+      { type: 'arcs', r: 174, segs: 4, gap: 16, w: 2, spin: 'ccw', speed: 45 },
+      { type: 'ticks', r: 152, n: 48, len: 8, w: 1.2, every: 6, spin: 'cw', speed: 70 },
+      { type: 'circle', r: 136, w: 1, dash: '2 7', opacity: 0.55, spin: 'ccw', speed: 160 },
+      { type: 'progress', r: 120, w: 3, id: 'boot-ring-fill' },
+      { type: 'arcs', r: 102, segs: 3, gap: 42, w: 4, spin: 'cw', speed: 9, cls: 'ring--bright' },
+      { type: 'circle', r: 80, w: 1, dash: '1 5', opacity: 0.5, spin: 'ccw', speed: 36 },
+      { type: 'brackets', r: 64, size: 14, w: 2, cls: 'ring--brackets' },
+      { type: 'circle', r: 46, w: 0, fill: 'url(#coreGlow)', cls: 'ring--core' },
+    ]);
+    const ringFill = $('#boot-ring-fill');
+    const ringLen = ringFill ? parseFloat(ringFill.dataset.len) : 0;
+
+    // Hex memory map
+    const hexmap = $('#boot-hexmap');
+    const cells = [];
+    if (hexmap) { for (let i = 0; i < 96; i++) { const c = document.createElement('i'); hexmap.appendChild(c); cells.push(c); } }
+    const order = cells.map((_, i) => i).sort(() => Math.random() - 0.5);
+    const memEl = $('#boot-mem');
+
+    // Voice pattern
+    const waveEl = $('#boot-wave');
+    let amp = 0.2;
+    const stopWave = waveEl ? HUD.wave(waveEl, () => amp) : () => {};
+
     const pct = $('#boot-pct');
-    const dur = seenBoot ? 0.9 : 2.3;
+    const phase = $('#boot-phase');
+    const logEl = $('#boot-log');
+    const sysCount = $('#boot-sys-count');
+    const gauges = $$('#boot-gauges li');
+    const t0 = performance.now();
+    const stamp = () => {
+      const ms = performance.now() - t0;
+      const mm = String(Math.floor(ms / 60000)).padStart(2, '0');
+      const ss = String(Math.floor(ms / 1000) % 60).padStart(2, '0');
+      const cs = String(Math.floor(ms / 10) % 100).padStart(2, '0');
+      return `${mm}:${ss}.${cs}`;
+    };
+
+    const LOG = [
+      ['SYS', 'Stark OS 9.2.1 kernel loaded'],
+      ['PWR', 'Arc reactor output nominal at 3.0 GJ/s'],
+      ['NET', 'Uplink established: Bennett University, Greater Noida'],
+      ['SYS', 'Calibrating repulsor drivers and flight stabilizers'],
+      ['SEC', 'Recruit clearance verified. Welcome to the initiative'],
+      ['AI', 'J.A.R.V.I.S. online. Good evening, recruit'],
+    ];
+    const addLog = (k, m) => {
+      if (!logEl) return;
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="t">${stamp()}</span><span class="k">[${k}]</span><span class="m"></span>`;
+      logEl.appendChild(li);
+      const mEl = li.querySelector('.m');
+      HUD.type(mEl, m, { cps: 110, instant: quick, onChar: () => HUD.audio.tick() }).then(() => li.classList.add('ok'));
+    };
+
     const counter = { v: 0 };
-    gsap.set(boot, { clipPath: 'inset(0% 0% 0% 0%)' });
+    const mem = { n: 0 };
+    let done = 0;
+    const tl = gsap.timeline({ onComplete: () => { stopWave(); finishBoot(false); } });
 
-    const tl = gsap.timeline({ onComplete: finishBoot });
-    tl.to(lines, { opacity: 1, y: 0, duration: 0.35, stagger: dur / lines.length, ease: 'power2.out' }, 0)
-      .to(counter, {
-        v: 100, duration: dur, ease: 'power1.inOut',
+    // percent + progress ring + phases
+    tl.to(counter, {
+      v: 100, duration: dur * 0.9, ease: 'power1.inOut',
+      onUpdate: () => {
+        const v = Math.round(counter.v);
+        if (pct) pct.textContent = String(v).padStart(2, '0');
+        if (ringFill) ringFill.style.strokeDashoffset = String(ringLen * (1 - v / 100));
+        if (phase) phase.textContent = v < 30 ? 'INITIALIZING' : v < 62 ? 'CALIBRATING' : v < 96 ? 'SYNCING' : 'ONLINE';
+      },
+    }, 0);
+    // log lines
+    LOG.forEach((entry, i) => tl.call(addLog, entry, 0.15 + (i / LOG.length) * dur * 0.7));
+    // gauges
+    gauges.forEach((li, i) => {
+      const target = [100, 100, 98, 100, 100, 97][i] || 100;
+      const o = { v: 0 };
+      tl.to(o, {
+        v: target, duration: dur * 0.3, ease: 'power2.out',
         onUpdate: () => {
-          const v = Math.round(counter.v);
-          if (pct) pct.textContent = String(v).padStart(2, '0');
-          if (ring) ring.style.strokeDashoffset = String(326.7 * (1 - v / 100));
+          const b = li.querySelector('b');
+          const em = li.querySelector('em');
+          if (b) b.style.width = `${o.v}%`;
+          if (em) em.textContent = `${Math.round(o.v)}%`;
         },
-      }, 0)
-      .to({}, { duration: 0.35 });
+        onComplete: () => { li.classList.add('ok'); done += 1; if (sysCount) sysCount.textContent = `${done}/${gauges.length}`; },
+      }, 0.3 + i * (dur * 0.1));
+    });
+    // memory map
+    tl.to(mem, {
+      n: cells.length, duration: dur * 0.8, ease: 'none',
+      onUpdate: () => {
+        const n = Math.floor(mem.n);
+        for (let k = 0; k < n; k++) cells[order[k]].classList.add('on');
+        if (memEl) memEl.textContent = `${n} / ${cells.length}`;
+      },
+    }, 0.2);
+    // voice line
+    const quoteEl = $('#boot-quote');
+    tl.call(() => {
+      amp = 1;
+      if (quoteEl) {
+        HUD.type(quoteEl, 'Good evening. All systems are nominal. Shall we build something that flies?', { cps: 55, instant: quick, onChar: () => HUD.audio.tick() })
+          .then(() => { amp = 0.25; });
+      }
+    }, [], dur * 0.5);
+    tl.to({}, { duration: 0.35 });
 
-    const skip = $('#boot-skip');
-    skip && skip.addEventListener('click', () => tl.progress(1));
-    boot.addEventListener('click', (e) => { if (e.target === boot || e.target.classList.contains('boot__scan')) tl.progress(1); });
+    if (HUD.audio.enabled) HUD.audio.sweep();
+
+    const skip = () => { if (bootDone) return; tl.kill(); stopWave(); finishBoot(true); };
+    const skipBtn = $('#boot-skip');
+    skipBtn && skipBtn.addEventListener('click', skip);
+    const onKey = (e) => { if (e.key === 'Escape') { skip(); document.removeEventListener('keydown', onKey); } };
+    document.addEventListener('keydown', onKey);
   };
 
   runBoot();
@@ -254,7 +362,7 @@
     // hero parallax
     if (!prefersReduced) {
       gsap.to('.hero__inner', { y: 140, opacity: 0.2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-      gsap.to('.hero__canvas', { y: 90, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+      gsap.to(['.hero__canvas', '.hero__hud'], { y: 90, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
       gsap.to('.hud', { opacity: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: '20% top', end: '60% top', scrub: true } });
     }
 
@@ -286,7 +394,10 @@
         gsap.from(words, {
           opacity: 0, yPercent: 60, rotateX: -40, transformOrigin: '50% 100%',
           duration: 1.1, ease: 'power4.out', stagger: 0.045,
-          scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+          scrollTrigger: {
+            trigger: el, start: 'top 88%', once: true,
+            onEnter: () => { el.classList.add('glitch'); setTimeout(() => el.classList.remove('glitch'), 700); },
+          },
         });
       } else {
         gsap.from(el, {

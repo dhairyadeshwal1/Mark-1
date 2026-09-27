@@ -34,8 +34,22 @@ The event language carries the metaphor throughout:
 
 ## What's interactive
 
-- **Boot sequence preloader** with system-check log, progress ring and wipe
-  transition. Shortened on repeat visits in the same session, skippable by click.
+- **J.A.R.V.I.S. suit-initialization boot**: a full-screen HUD with rotating
+  tick rings, a gold progress ring, phase readouts, a timestamped system log
+  typing in, six suit-system gauges, a voice-pattern waveform with a typed
+  greeting and a hex memory map, ending in a targeting lock, a flash and a
+  visor-split reveal. Shortened on repeat visits in the same session,
+  skippable with ESC.
+- **J.A.R.V.I.S. status bar** with a live voice waveform that comments on
+  each section as you scroll.
+- **J.A.R.V.I.S. command line** (press `/` or tap Talk): type `help`,
+  `register`, `tracks`, `prizes`, `overload` or a plain question and get typed
+  replies that also navigate the page.
+- **Targeting HUD** around the reactor: rotating rings, corner brackets and
+  live telemetry chips that drift like real sensors. Cards get snap-in
+  targeting brackets on hover ("TARGET LOCKED") and headings glitch on reveal.
+- **Optional synthesized audio** (nav toggle): hover blips, confirmation tones
+  and an overload alarm generated with the Web Audio API, no sound files.
 - **Live 3D arc reactor** (Three.js + Unreal bloom). Ten copper-wrapped coils,
   housing rings, HUD tick ring and drifting particles. It tilts toward the
   cursor, spins faster when you scroll, and pauses rendering when off-screen.
@@ -61,6 +75,7 @@ The event language carries the metaphor throughout:
 - [GSAP 3.12](https://gsap.com/) + ScrollTrigger — animation and scroll choreography
 - [Lenis 1.1](https://lenis.darkroom.engineering/) — smooth scrolling
 - [Three.js r160](https://threejs.org/) — arc reactor, with `UnrealBloomPass`
+- Web Audio API — opt-in synthesized HUD sounds, no audio files
 - No build step. Open `index.html` or serve the folder.
 
 ## Project structure
@@ -69,7 +84,10 @@ The event language carries the metaphor throughout:
 .
 ├── index.html          # page structure and content
 ├── css/styles.css      # design system, components, responsive rules
+├── css/hud.css         # J.A.R.V.I.S. layer: boot, rings, targeting, terminal
+├── js/hud.js           # HUD toolkit: SVG ring builder, waveform, typewriter, synth audio
 ├── js/main.js          # boot sequence, scroll, reveals, cursor, forms
+├── js/jarvis.js        # status bar, command line, telemetry, targeting brackets
 ├── js/reactor.js       # Three.js arc reactor (ES module)
 ├── assets/favicon.svg
 └── docs/plans/         # design document
@@ -101,7 +119,7 @@ or your own endpoint; the `data` object already contains every field.
 
 | Resource | Use |
 | --- | --- |
-| Google Fonts: [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue), [Rajdhani](https://fonts.google.com/specimen/Rajdhani), [Inter](https://fonts.google.com/specimen/Inter) | Display, HUD and body typography |
+| Google Fonts: [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue), [Rajdhani](https://fonts.google.com/specimen/Rajdhani), [Inter](https://fonts.google.com/specimen/Inter), [Orbitron](https://fonts.google.com/specimen/Orbitron), [Share Tech Mono](https://fonts.google.com/specimen/Share+Tech+Mono) | Display, HUD labels, body, numerals and terminal typography |
 | [Font Awesome 6.5.2](https://fontawesome.com/) | Icons |
 | [GSAP 3.12.5](https://gsap.com/) | Animation, ScrollTrigger |
 | [Lenis 1.1.18](https://github.com/darkroomengineering/lenis) | Smooth scroll |

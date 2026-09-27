@@ -15,11 +15,12 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=Orbitron:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/hud.css" />
 
-  <noscript><style>.boot{display:none}.hud{opacity:1}.hero__canvas{display:none}</style></noscript>
+  <noscript><style>.boot,.jarvis,.term,.hero__hud{display:none}.hud{opacity:1}.hero__canvas{display:none}</style></noscript>
   <script type="importmap">
     {
       "imports": {
@@ -31,27 +32,69 @@
 </head>
 <body>
 
-  <!-- ============ BOOT SEQUENCE / PRELOADER ============ -->
+  <!-- ============ BOOT SEQUENCE / J.A.R.V.I.S. SUIT INITIALIZATION ============ -->
   <div class="boot" id="boot" aria-hidden="true">
-    <div class="boot__scan"></div>
-    <div class="boot__inner">
-      <div class="boot__ring">
-        <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
-          <circle class="boot__ring-track" cx="60" cy="60" r="52" />
-          <circle class="boot__ring-fill" id="boot-ring" cx="60" cy="60" r="52" />
-          <circle class="boot__ring-core" cx="60" cy="60" r="18" />
+    <div class="boot__visor boot__visor--top"></div>
+    <div class="boot__visor boot__visor--bottom"></div>
+
+    <div class="boot__stage">
+      <div class="boot__hex"></div>
+      <div class="boot__scan"></div>
+
+      <div class="boot__core">
+        <svg class="boot__rings" id="boot-rings" viewBox="0 0 420 420" aria-hidden="true">
+          <defs>
+            <radialGradient id="coreGlow">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="35%" stop-color="#9ef3ff" />
+              <stop offset="70%" stop-color="#5ee7ff" stop-opacity="0.35" />
+              <stop offset="100%" stop-color="#5ee7ff" stop-opacity="0" />
+            </radialGradient>
+          </defs>
         </svg>
-        <span class="boot__pct" id="boot-pct">00</span>
+        <div class="boot__readout">
+          <b id="boot-pct">00</b><span>%</span>
+          <em id="boot-phase">INITIALIZING</em>
+        </div>
       </div>
-      <div class="boot__log" id="boot-log">
-        <p class="boot__line">STARK INDUSTRIES // BOOT SEQUENCE v9.2</p>
-        <p class="boot__line">&gt; loading repulsor drivers <span class="ok">OK</span></p>
-        <p class="boot__line">&gt; calibrating arc reactor <span class="ok">OK</span></p>
-        <p class="boot__line">&gt; uplink: BENNETT UNIVERSITY, GREATER NOIDA <span class="ok">OK</span></p>
-        <p class="boot__line">&gt; J.A.R.V.I.S. online. Welcome, recruit.</p>
+
+      <div class="bpanel bpanel--tl">
+        <div class="bpanel__head"><span>Stark Industries</span><span>J.A.R.V.I.S. OS 9.2.1</span></div>
+        <ol class="boot__log" id="boot-log"></ol>
       </div>
-      <button class="boot__skip" id="boot-skip" type="button">Skip sequence</button>
+
+      <div class="bpanel bpanel--tr">
+        <div class="bpanel__head"><span>Suit systems</span><span id="boot-sys-count">0/6</span></div>
+        <ul class="gauges" id="boot-gauges">
+          <li><span>Arc reactor</span><i><b></b></i><em>0%</em></li>
+          <li><span>Repulsors</span><i><b></b></i><em>0%</em></li>
+          <li><span>Flight stabilizers</span><i><b></b></i><em>0%</em></li>
+          <li><span>Targeting</span><i><b></b></i><em>0%</em></li>
+          <li><span>Life support</span><i><b></b></i><em>0%</em></li>
+          <li><span>Neural link</span><i><b></b></i><em>0%</em></li>
+        </ul>
+      </div>
+
+      <div class="bpanel bpanel--bl">
+        <div class="bpanel__head"><span>Voice pattern</span><span>J.A.R.V.I.S.</span></div>
+        <canvas class="boot__wave" id="boot-wave" width="320" height="64" aria-hidden="true"></canvas>
+        <p class="boot__quote"><span id="boot-quote"></span><i class="caret"></i></p>
+      </div>
+
+      <div class="bpanel bpanel--br">
+        <div class="bpanel__head"><span>Memory map</span><span id="boot-mem">0 / 96</span></div>
+        <div class="hexmap" id="boot-hexmap"></div>
+        <div class="bpanel__foot"><span>Uplink</span><span>Bennett University · 28.45° N 77.58° E</span></div>
+      </div>
+
+      <div class="boot__title">
+        <span class="boot__title-main">MARK I</span>
+        <span class="boot__title-sub">Suit initialization sequence</span>
+      </div>
+      <button class="boot__skip" id="boot-skip" type="button">Skip sequence <kbd>ESC</kbd></button>
     </div>
+
+    <div class="boot__flash"></div>
     <div class="boot__corner boot__corner--tl"></div>
     <div class="boot__corner boot__corner--tr"></div>
     <div class="boot__corner boot__corner--bl"></div>
@@ -66,6 +109,8 @@
     </div>
     <div class="cursor__label" id="cursor-label"></div>
   </div>
+  <div class="hexgrid" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
   <div class="noise" aria-hidden="true"></div>
   <div class="progress" id="progress" aria-hidden="true"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -91,6 +136,9 @@
       </nav>
 
       <div class="nav__right">
+        <button class="nav__audio" id="audio-toggle" type="button" aria-pressed="false" data-cursor="Sound" title="Toggle HUD sounds">
+          <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i><span>Audio</span>
+        </button>
         <a href="#register" class="btn btn--primary btn--sm magnetic" data-cursor="Suit up">
           <span>Register</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
         </a>
@@ -123,11 +171,23 @@
       <div class="hero__grid" aria-hidden="true"></div>
       <div class="hero__vignette" aria-hidden="true"></div>
 
-      <div class="hud hud--tl" aria-hidden="true">
-        <span class="hud__dot"></span>SYSTEM ONLINE<span class="hud__sep"></span><span id="hud-clock">00:00:00</span>
+      <div class="hero__hud" id="hero-hud" aria-hidden="true">
+        <div class="hero__hud-inner">
+          <svg id="hero-rings" viewBox="0 0 420 420"></svg>
+          <span class="hud-chip hud-chip--1">Power<b data-jit="100" data-spread="0.6" data-unit="%"></b></span>
+          <span class="hud-chip hud-chip--2">Output<b data-jit="3.0" data-spread="0.12" data-dec="2" data-unit=" GJ/s"></b></span>
+          <span class="hud-chip hud-chip--3">Stability<b data-jit="99.8" data-spread="0.3" data-unit="%"></b></span>
+        </div>
       </div>
-      <div class="hud hud--tr" aria-hidden="true">STARK INDUSTRIES // PROTOTYPE DIVISION</div>
-      <div class="hud hud--bl" aria-hidden="true">28.4501° N, 77.5859° E<br />GREATER NOIDA, IN</div>
+
+      <div class="hud hud--tl" aria-hidden="true">
+        <span class="hud__dot"></span>SYSTEM ONLINE<span class="hud__sep"></span><span id="hud-clock">00:00:00</span><br />
+        <span class="hud__line2">28.4501° N, 77.5859° E<span class="hud__sep"></span>GREATER NOIDA, IN</span>
+      </div>
+      <div class="hud hud--tr" aria-hidden="true">
+        STARK INDUSTRIES // PROTOTYPE DIVISION<br />
+        SIG <b data-jit="98" data-spread="3" data-dec="0" data-unit="%"></b><span class="hud__sep"></span>TEMP <b data-jit="36.4" data-unit="°C"></b><span class="hud__sep"></span>ALT <b data-jit="201" data-spread="2" data-dec="0" data-unit=" M"></b>
+      </div>
       <a href="#briefing" class="hud hud--br" data-cursor="Go">
         SCROLL TO INITIATE <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
       </a>
@@ -718,10 +778,31 @@
     </div>
   </footer>
 
+  <!-- ============ J.A.R.V.I.S. ============ -->
+  <div class="jarvis" id="jarvis">
+    <canvas class="jarvis__wave" id="jarvis-wave" width="168" height="52" aria-hidden="true"></canvas>
+    <p class="jarvis__text" aria-live="polite"><span class="jarvis__name">J.A.R.V.I.S.</span><span id="jarvis-msg"></span></p>
+    <button class="jarvis__open" id="jarvis-open" type="button" data-cursor="Talk">Talk <kbd>/</kbd></button>
+  </div>
+
+  <div class="term" id="term" aria-hidden="true" role="dialog" aria-label="J.A.R.V.I.S. command line">
+    <div class="term__head">
+      <span><span class="hud__dot"></span>J.A.R.V.I.S. // COMMAND LINE</span>
+      <button type="button" id="term-close" aria-label="Close command line">×</button>
+    </div>
+    <div class="term__log" id="term-log"></div>
+    <form class="term__form" id="term-form" autocomplete="off">
+      <span>&gt;</span>
+      <input id="term-input" type="text" placeholder="type 'help' or ask a question" aria-label="Command" />
+    </form>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="js/hud.js"></script>
   <script src="js/main.js" defer></script>
+  <script src="js/jarvis.js" defer></script>
   <script type="module" src="js/reactor.js"></script>
 </body>
 </html>

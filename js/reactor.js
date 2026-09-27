@@ -192,15 +192,22 @@ function init() {
       const vh = window.innerHeight;
       const pxPerUnit = h / (2 * halfH);
       const radiusPx = Math.min(w * 0.42, vh * 0.22, 230);
-      const centerPx = Math.min(radiusPx * 1.35, vh * 0.32);
+      const centerPx = Math.min(radiusPx * 1.45, vh * 0.34);
       reactor.scale.setScalar(radiusPx / pxPerUnit / 1.65);
       reactor.position.set(0, halfH - centerPx / pxPerUnit, 0);
       hero.style.setProperty('--reactor-bottom', `${Math.round(centerPx + radiusPx)}px`);
+      hero.style.setProperty('--reactor-x', `${Math.round(w / 2)}px`);
+      hero.style.setProperty('--reactor-y', `${Math.round(centerPx)}px`);
+      hero.style.setProperty('--reactor-r', `${Math.round(radiusPx)}px`);
     } else {
-      const s = Math.min(1.05, (halfH * 0.92) / 1.65);
+      const s = Math.min(0.96, (halfH * 0.9) / 1.65);
       reactor.scale.setScalar(s);
       reactor.position.set(halfW * 0.4, 0, 0);
       hero.style.removeProperty('--reactor-bottom');
+      const pxPerUnit = h / (2 * halfH);
+      hero.style.setProperty('--reactor-x', `${Math.round(w * 0.7)}px`);
+      hero.style.setProperty('--reactor-y', `${Math.round(h / 2)}px`);
+      hero.style.setProperty('--reactor-r', `${Math.round(s * 1.65 * pxPerUnit)}px`);
     }
   };
   layout();
