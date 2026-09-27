@@ -11,26 +11,27 @@ Paste-ready material for the GFG Student Chapter submission form.
 
 > **MARK I — "Build your first suit."**
 >
-> Tony Stark built the Mark I in a cave, in a weekend, out of scraps. That is exactly what a hackathon is, so the site frames a 24-hour hackathon by the GFG Student Chapter at Bennett University as a Stark Industries prototype program. Every section speaks the same language: the preloader is a J.A.R.V.I.S. boot sequence, the tracks are "suit systems" (J.A.R.V.I.S., Repulsor, Arc Reactor, Nanotech), the schedule is a mission log, the sponsors are allied organisations from the Marvel universe, and registration is recruitment ("Suit up.").
+> Tony Stark built the Mark I in a cave, in a weekend, out of scraps. That is exactly what a hackathon is, so the site presents a 24-hour hackathon by the GFG Student Chapter at Bennett University the way Stark Industries would: as a recruitment terminal run by J.A.R.V.I.S., not as a poster.
 >
-> Instead of pasting Marvel posters onto a template, the whole site behaves like Tony's heads-up display, run by J.A.R.V.I.S. It opens with a suit-initialization boot: rotating tick rings, a progress ring, a timestamped system log typing in, suit-system gauges, a voice-pattern waveform with a typed greeting and a hex memory map, ending in a targeting lock, a flash and a visor-split reveal. Behind it floats J.A.R.V.I.S. himself, modelled in Three.js after his Age of Ultron form: a golden sphere of thousands of glowing nodes with orbital bands and rings, framed by rotating targeting rings and telemetry chips that drift like real sensors; he tilts toward the cursor and spins faster as you scroll. J.A.R.V.I.S. stays with you: a status bar with a live voice waveform comments on each section, and a command line (press slash) answers typed questions and navigates the page. Hex grids, scan-lines, film grain, corner brackets and optional synthesized HUD sounds complete the interface. Motion is choreographed with GSAP ScrollTrigger and Lenis smooth scroll: word-by-word heading reveals, a timeline that "charges" as you read it, animated stat counters, magnetic buttons, 3D-tilting cards with a spotlight and scan sweep, and a reticle cursor with contextual labels. Tap the reactor three times to overload it.
+> It is designed as an interface rather than a landing page. A fixed top bar holds the module tabs and a live clock; every section is a bordered panel with a monospace label and the content is laid out as data rows and tables: an event file, a mission briefing, four suit systems (J.A.R.V.I.S., Repulsor, Arc Reactor, Nanotech), the schedule as a mission log, rewards, a query database and a recruit intake form. One accent colour, nothing decorative that does not carry information.
 >
-> The page is fully responsive from 360 px phones to ultrawide desktops, respects `prefers-reduced-motion`, falls back to a CSS reactor when WebGL is unavailable, and stays readable if JavaScript or a CDN fails. No Marvel artwork or stock photography is used; everything on screen is original CSS, SVG and Three.js geometry.
+> The only living element is J.A.R.V.I.S. himself, modelled in Three.js after his Age of Ultron form: a golden sphere of thousands of glowing nodes with orbital bands and rings, sitting in the overview panel above a telemetry strip. He materializes during a suit-initialization boot sequence, lives as a small orb in the status line, comments on each module as you scroll, and answers typed questions in a command line (press slash). Tap him three times to overload him.
+>
+> The page is fully responsive from 360 px phones to desktops, respects `prefers-reduced-motion`, falls back to a CSS-only core when WebGL is unavailable and stays readable without JavaScript. No Marvel artwork or stock photography is used; everything on screen is original CSS, SVG, canvas and Three.js geometry.
 
 ## Tech stack
 
-HTML5 · CSS3 · vanilla JavaScript · GSAP 3.12 + ScrollTrigger · Lenis 1.1 · Three.js r160 (UnrealBloomPass) · Web Audio API. No build step.
+HTML5 · CSS3 · vanilla JavaScript · GSAP 3.12 (boot timeline) · Three.js r160 (UnrealBloomPass) · Web Audio API. No build step.
 
 ## Resources and assets used
 
 | Resource | Purpose |
 | --- | --- |
-| Google Fonts — Bebas Neue, Rajdhani, Inter, Orbitron, Share Tech Mono | Display, HUD labels, body, numerals and terminal typography |
+| Google Fonts — Rajdhani, Share Tech Mono, Inter | Interface, data and reading typography |
 | Font Awesome 6.5.2 (CDN) | Icons |
-| GSAP 3.12.5 + ScrollTrigger (cdnjs) | Animation and scroll choreography |
-| Lenis 1.1.18 (jsDelivr) | Smooth scrolling |
+| GSAP 3.12.5 (cdnjs) | Boot sequence timeline |
 | Three.js 0.160.0 (jsDelivr) | 3D J.A.R.V.I.S. core and bloom post-processing |
-| Inline SVG / canvas | Favicon, reactor logo mark, film-grain tile |
+| Inline SVG / canvas | Favicon, boot rings, 2D orb |
 
 No images from Unsplash or Pexels were needed; all visuals are generated.
 

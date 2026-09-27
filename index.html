@@ -3,24 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MARK I — 24-Hour Hackathon | GeeksforGeeks Student Chapter, Bennett University</title>
-  <meta name="description" content="MARK I is a 24-hour hackathon by the GeeksforGeeks Student Chapter, Bennett University. Build your first suit. 14–15 November 2026, Greater Noida. ₹1,00,000 prize pool." />
-  <meta name="theme-color" content="#07070a" />
+  <title>MARK I — Recruitment Terminal | GeeksforGeeks Student Chapter, Bennett University</title>
+  <meta name="description" content="MARK I is a 24-hour hackathon by the GeeksforGeeks Student Chapter, Bennett University. 14–15 November 2026, Greater Noida. ₹1,00,000 prize pool." />
+  <meta name="theme-color" content="#070a0e" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="MARK I — Build your first suit." />
   <meta property="og:description" content="A 24-hour hackathon by the GeeksforGeeks Student Chapter, Bennett University. 14–15 Nov 2026." />
-  <meta property="og:image" content="assets/og.png" />
-  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=Orbitron:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/hud.css" />
-
-  <noscript><style>.boot,.jarvis,.term,.hero__hud{display:none}.hud{opacity:1}.hero__canvas{display:none}</style></noscript>
+  <link rel="stylesheet" href="css/ui.css" />
+  <noscript><style>.boot,.statusbar,.term{display:none}.core-view canvas{display:none}[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
   <script type="importmap">
     {
       "imports": {
@@ -32,39 +28,26 @@
 </head>
 <body>
 
-  <!-- ============ BOOT SEQUENCE / J.A.R.V.I.S. SUIT INITIALIZATION ============ -->
+  <!-- ============ BOOT: SUIT INITIALIZATION ============ -->
   <div class="boot" id="boot" aria-hidden="true">
     <div class="boot__visor boot__visor--top"></div>
     <div class="boot__visor boot__visor--bottom"></div>
-
     <div class="boot__stage">
-      <div class="boot__hex"></div>
-      <div class="boot__scan"></div>
-
       <div class="boot__core">
         <canvas class="boot__orb" id="boot-orb" width="520" height="520" aria-hidden="true"></canvas>
-        <svg class="boot__rings" id="boot-rings" viewBox="0 0 420 420" aria-hidden="true">
-          <defs>
-            <radialGradient id="coreGlow">
-              <stop offset="0%" stop-color="#ffffff" />
-              <stop offset="35%" stop-color="#9ef3ff" />
-              <stop offset="70%" stop-color="#5ee7ff" stop-opacity="0.35" />
-              <stop offset="100%" stop-color="#5ee7ff" stop-opacity="0" />
-            </radialGradient>
-          </defs>
-        </svg>
+        <svg class="boot__rings" id="boot-rings" viewBox="0 0 420 420" aria-hidden="true"></svg>
         <div class="boot__readout">
           <b id="boot-pct">00</b><span>%</span>
           <em id="boot-phase">INITIALIZING</em>
         </div>
       </div>
 
-      <div class="bpanel bpanel--tl">
+      <div class="bpanel bpanel--log">
         <div class="bpanel__head"><span>Stark Industries</span><span>J.A.R.V.I.S. OS 9.2.1</span></div>
         <ol class="boot__log" id="boot-log"></ol>
       </div>
 
-      <div class="bpanel bpanel--tr">
+      <div class="bpanel bpanel--sys">
         <div class="bpanel__head"><span>Suit systems</span><span id="boot-sys-count">0/6</span></div>
         <ul class="gauges" id="boot-gauges">
           <li><span>Arc reactor</span><i><b></b></i><em>0%</em></li>
@@ -76,731 +59,341 @@
         </ul>
       </div>
 
-      <div class="bpanel bpanel--bl">
-        <div class="bpanel__head"><span>Voice pattern</span><span>J.A.R.V.I.S.</span></div>
-        <canvas class="boot__wave" id="boot-wave" width="320" height="64" aria-hidden="true"></canvas>
-        <p class="boot__quote"><span id="boot-quote"></span><i class="caret"></i></p>
-      </div>
-
-      <div class="bpanel bpanel--br">
-        <div class="bpanel__head"><span>Memory map</span><span id="boot-mem">0 / 96</span></div>
-        <div class="hexmap" id="boot-hexmap"></div>
-        <div class="bpanel__foot"><span>Uplink</span><span>Bennett University · 28.45° N 77.58° E</span></div>
-      </div>
-
-      <div class="boot__title">
-        <span class="boot__title-main">MARK I</span>
-        <span class="boot__title-sub">Suit initialization sequence</span>
-      </div>
-      <button class="boot__skip" id="boot-skip" type="button">Skip sequence <kbd>ESC</kbd></button>
+      <div class="boot__title"><span>MARK I</span><small>Suit initialization sequence</small></div>
+      <button class="boot__skip" id="boot-skip" type="button">Skip <kbd>ESC</kbd></button>
     </div>
-
     <div class="boot__flash"></div>
-    <div class="boot__corner boot__corner--tl"></div>
-    <div class="boot__corner boot__corner--tr"></div>
-    <div class="boot__corner boot__corner--bl"></div>
-    <div class="boot__corner boot__corner--br"></div>
   </div>
 
-  <!-- ============ GLOBAL CHROME ============ -->
-  <div class="cursor" id="cursor" aria-hidden="true">
-    <div class="cursor__dot"></div>
-    <div class="cursor__ring">
-      <span></span><span></span><span></span><span></span>
-    </div>
-    <div class="cursor__label" id="cursor-label"></div>
-  </div>
-  <div class="hexgrid" aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
-  <div class="noise" aria-hidden="true"></div>
-  <div class="progress" id="progress" aria-hidden="true"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- ============ NAV ============ -->
-  <header class="nav" id="nav">
-    <div class="container nav__inner">
-      <a href="#top" class="nav__brand" data-cursor="Top" aria-label="MARK I home">
-        <svg class="nav__mark" viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
-          <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
-          <circle cx="20" cy="20" r="12" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 3"/>
-          <circle cx="20" cy="20" r="5" fill="currentColor"/>
-        </svg>
-        <span class="nav__brand-text">MARK<em>I</em></span>
-      </a>
-
-      <nav class="nav__links" aria-label="Primary">
-        <a href="#briefing" data-nav="briefing">Briefing</a>
-        <a href="#tracks" data-nav="tracks">Tracks</a>
-        <a href="#timeline" data-nav="timeline">Timeline</a>
-        <a href="#rewards" data-nav="rewards">Rewards</a>
-        <a href="#faq" data-nav="faq">FAQ</a>
-      </nav>
-
-      <div class="nav__right">
-        <button class="nav__audio" id="audio-toggle" type="button" aria-pressed="false" data-cursor="Sound" title="Toggle HUD sounds">
-          <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i><span>Audio</span>
-        </button>
-        <a href="#register" class="btn btn--primary btn--sm magnetic" data-cursor="Suit up">
-          <span>Register</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </a>
-        <button class="nav__burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
-          <span></span><span></span>
-        </button>
-      </div>
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar" id="nav">
+    <a href="#overview" class="topbar__brand" aria-label="MARK I home">
+      <span class="topbar__mark">MK-I</span>
+      <span class="topbar__brandtext">Stark Industries <em>//</em> Recruitment terminal</span>
+    </a>
+    <nav class="topbar__nav" aria-label="Modules">
+      <a href="#overview" data-nav="overview"><i>01</i>Overview</a>
+      <a href="#briefing" data-nav="briefing"><i>02</i>Briefing</a>
+      <a href="#systems" data-nav="systems"><i>03</i>Systems</a>
+      <a href="#log" data-nav="log"><i>04</i>Mission log</a>
+      <a href="#rewards" data-nav="rewards"><i>05</i>Rewards</a>
+      <a href="#queries" data-nav="queries"><i>06</i>Queries</a>
+      <a href="#recruit" data-nav="recruit"><i>07</i>Recruit</a>
+    </nav>
+    <div class="topbar__right">
+      <span class="topbar__clock"><i class="dot"></i><span id="hud-clock">00:00:00</span> IST</span>
+      <button class="iconbtn" id="audio-toggle" type="button" aria-pressed="false" title="Toggle interface sounds"><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
+      <a href="#recruit" class="btn btn--primary btn--sm">Register</a>
+      <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
     </div>
   </header>
 
-  <!-- Mobile menu -->
   <div class="menu" id="menu" aria-hidden="true">
-    <div class="menu__bg"></div>
-    <nav class="menu__links" aria-label="Mobile">
-      <a href="#briefing"><span class="menu__num">01</span>Briefing</a>
-      <a href="#tracks"><span class="menu__num">02</span>Tracks</a>
-      <a href="#timeline"><span class="menu__num">03</span>Timeline</a>
-      <a href="#rewards"><span class="menu__num">04</span>Rewards</a>
-      <a href="#faq"><span class="menu__num">05</span>FAQ</a>
-      <a href="#register" class="menu__cta"><span class="menu__num">06</span>Register</a>
+    <nav class="menu__links" aria-label="Mobile modules">
+      <a href="#overview"><i>01</i>Overview</a>
+      <a href="#briefing"><i>02</i>Briefing</a>
+      <a href="#systems"><i>03</i>Systems</a>
+      <a href="#log"><i>04</i>Mission log</a>
+      <a href="#rewards"><i>05</i>Rewards</a>
+      <a href="#queries"><i>06</i>Queries</a>
+      <a href="#recruit" class="menu__cta"><i>07</i>Recruit</a>
     </nav>
-    <p class="menu__foot">GFG Student Chapter × Bennett University</p>
   </div>
 
-  <main>
-    <!-- ============ HERO ============ -->
-    <section class="hero" id="top">
-      <canvas class="hero__canvas" id="jarvis-core" aria-label="Interactive 3D J.A.R.V.I.S. core" data-cursor="Tap ×3"></canvas>
-      <div class="hero__fallback" aria-hidden="true"></div>
-      <div class="hero__grid" aria-hidden="true"></div>
-      <div class="hero__vignette" aria-hidden="true"></div>
+  <main class="ui">
 
-      <div class="hero__hud" id="hero-hud" aria-hidden="true">
-        <div class="hero__hud-inner">
-          <svg id="hero-rings" viewBox="0 0 420 420"></svg>
-          <span class="hud-chip hud-chip--1">Power<b data-jit="100" data-spread="0.6" data-unit="%"></b></span>
-          <span class="hud-chip hud-chip--2">Output<b data-jit="3.0" data-spread="0.12" data-dec="2" data-unit=" GJ/s"></b></span>
-          <span class="hud-chip hud-chip--3">Stability<b data-jit="99.8" data-spread="0.3" data-unit="%"></b></span>
+    <!-- ============ 01 OVERVIEW ============ -->
+    <section class="module module--overview" id="overview">
+      <div class="panel panel--core" data-reveal>
+        <div class="panel__head"><span>J.A.R.V.I.S. <em>//</em> core</span><span class="status"><i class="dot"></i>Online</span></div>
+        <div class="core-view">
+          <canvas id="jarvis-core" aria-label="J.A.R.V.I.S. core visualisation. Tap three times to overload." data-cursor="Tap ×3"></canvas>
+          <div class="core-fallback" aria-hidden="true"></div>
+        </div>
+        <div class="telemetry">
+          <div><span>Power</span><b data-jit="100" data-spread="0.6" data-unit="%"></b></div>
+          <div><span>Output</span><b data-jit="3.0" data-spread="0.12" data-dec="2" data-unit=" GJ/s"></b></div>
+          <div><span>Stability</span><b data-jit="99.8" data-spread="0.3" data-unit="%"></b></div>
+          <div><span>Session</span><b id="uptime">00:00:00</b></div>
         </div>
       </div>
 
-      <div class="hud hud--tl" aria-hidden="true">
-        <span class="hud__dot"></span>SYSTEM ONLINE<span class="hud__sep"></span><span id="hud-clock">00:00:00</span><br />
-        <span class="hud__line2">28.4501° N, 77.5859° E<span class="hud__sep"></span>GREATER NOIDA, IN</span>
-      </div>
-      <div class="hud hud--tr" aria-hidden="true">
-        STARK INDUSTRIES // PROTOTYPE DIVISION<br />
-        SIG <b data-jit="98" data-spread="3" data-dec="0" data-unit="%"></b><span class="hud__sep"></span>TEMP <b data-jit="36.4" data-unit="°C"></b><span class="hud__sep"></span>ALT <b data-jit="201" data-spread="2" data-dec="0" data-unit=" M"></b>
-      </div>
-      <a href="#briefing" class="hud hud--br" data-cursor="Go">
-        SCROLL TO INITIATE <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
-      </a>
+      <div class="panel panel--file" data-reveal>
+        <div class="panel__head"><span>Event file</span><span>MK-I <em>//</em> 2026</span></div>
+        <div class="panel__body">
+          <p class="eyebrow">GeeksforGeeks Student Chapter × Bennett University</p>
+          <h1 class="title">MARK I</h1>
+          <p class="subtitle">24-hour hackathon. Build your first suit.</p>
+          <p class="copy">Tony built the Mark I in a cave, in a weekend, out of scraps. You get 24 hours, unlimited Wi-Fi, a ₹1,00,000 prize pool and pizza. Ship something that flies.</p>
 
-      <div class="container hero__inner">
-        <p class="hero__eyebrow" data-hero>
-          <span class="hero__eyebrow-tag">GFG SC</span>
-          GeeksforGeeks Student Chapter × Bennett University presents
-        </p>
+          <dl class="data">
+            <div><dt>Date</dt><dd>14 – 15 November 2026</dd></div>
+            <div><dt>Venue</dt><dd>Bennett University, Greater Noida</dd></div>
+            <div><dt>Duration</dt><dd>24 hours, non-stop</dd></div>
+            <div><dt>Capacity</dt><dd>500 seats · teams of 2 – 4 · free entry</dd></div>
+            <div><dt>Prize pool</dt><dd>₹1,00,000 cash + internships + swag</dd></div>
+            <div><dt>T-minus</dt><dd class="countdown" id="countdown"><b data-cd="days">00</b><small>d</small> <b data-cd="hours">00</b><small>h</small> <b data-cd="mins">00</b><small>m</small> <b data-cd="secs">00</b><small>s</small></dd></div>
+          </dl>
 
-        <h1 class="hero__title" aria-label="Mark I">
-          <span class="hero__word">
-            <span class="char">M</span><span class="char">A</span><span class="char">R</span><span class="char">K</span>
-          </span>
-          <span class="hero__word hero__word--num">
-            <span class="char char--gold">I</span>
-          </span>
-        </h1>
-
-        <p class="hero__tag" data-hero>Build your first suit.</p>
-
-        <p class="hero__desc" data-hero>
-          Tony built the Mark I in a cave, in a weekend, out of scraps.
-          You get 24 hours, unlimited Wi-Fi, a ₹1,00,000 prize pool and pizza.
-          Ship something that flies.
-        </p>
-
-        <div class="hero__cta" data-hero>
-          <a href="#register" class="btn btn--primary magnetic" data-cursor="Suit up">
-            <span>Register your team</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-          </a>
-          <a href="#briefing" class="btn btn--ghost magnetic" data-cursor="Read">
-            <span>Mission briefing</span>
-          </a>
-        </div>
-
-        <div class="hero__bottom" data-hero>
-          <ul class="hero__meta">
-            <li><i class="fa-regular fa-calendar" aria-hidden="true"></i>14 – 15 Nov 2026</li>
-            <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i>Bennett University</li>
-            <li><i class="fa-solid fa-clock" aria-hidden="true"></i>24 Hours</li>
-          </ul>
-
-          <div class="countdown" id="countdown" aria-label="Countdown to MARK I">
-            <span class="countdown__label">T-MINUS</span>
-            <div class="countdown__unit"><b data-cd="days">00</b><small>Days</small></div>
-            <div class="countdown__unit"><b data-cd="hours">00</b><small>Hrs</small></div>
-            <div class="countdown__unit"><b data-cd="mins">00</b><small>Min</small></div>
-            <div class="countdown__unit"><b data-cd="secs">00</b><small>Sec</small></div>
+          <div class="actions">
+            <a href="#recruit" class="btn btn--primary">Register your team</a>
+            <a href="#briefing" class="btn">Read the briefing</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ TICKER ============ -->
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker__track">
-        <span>24 Hours</span><i></i><span>₹1,00,000 Prize Pool</span><i></i><span>4 Tracks</span><i></i><span>500 Seats</span><i></i><span>14 – 15 November 2026</span><i></i><span>Bennett University</span><i></i><span>Free Entry</span><i></i>
-        <span>24 Hours</span><i></i><span>₹1,00,000 Prize Pool</span><i></i><span>4 Tracks</span><i></i><span>500 Seats</span><i></i><span>14 – 15 November 2026</span><i></i><span>Bennett University</span><i></i><span>Free Entry</span><i></i>
-      </div>
-    </div>
-
-    <!-- ============ BRIEFING ============ -->
-    <section class="section briefing" id="briefing">
-      <div class="container">
-        <div class="briefing__grid">
-          <div class="briefing__left">
-            <p class="hud-label" data-reveal>// 01 — Mission Briefing</p>
-            <h2 class="display" data-reveal="words">A cave. A weekend. <span class="text-gold">A box of scraps.</span></h2>
+    <!-- ============ 02 BRIEFING ============ -->
+    <section class="module" id="briefing">
+      <header class="module__head" data-reveal><span><i>02</i>Mission briefing</span><span>Classification <em>//</em> open</span></header>
+      <div class="panel" data-reveal>
+        <div class="split">
+          <div class="split__main">
+            <h2 class="h2">A cave. A weekend. A box of scraps.</h2>
+            <p class="lead">That's how the first suit got built. No lab, no team of engineers, no second chances. MARK I is the same brief for you: one day to turn an idea into a working prototype that a room full of judges, mentors and recruiters can actually touch.</p>
+            <p class="copy">Hosted by the GeeksforGeeks Student Chapter at Bennett University, Greater Noida, MARK I brings together 500 builders across AI, web, hardware and open innovation. Come with a team or get matched at check-in. Leave with a demo, a network and, if you're good, a very large cheque.</p>
           </div>
-          <div class="briefing__right">
-            <p class="lead" data-reveal>
-              That's how the first suit got built. No lab, no team of engineers, no second chances.
-              MARK I is the same brief for you: one day to turn an idea into a working prototype
-              that a room full of judges, mentors and recruiters can actually touch.
-            </p>
-            <p data-reveal>
-              Hosted by the GeeksforGeeks Student Chapter at Bennett University, Greater Noida,
-              MARK I brings together 500 builders across AI, web, hardware and open innovation.
-              Come with a team or get matched at check-in. Leave with a demo, a network and,
-              if you're good, a very large cheque.
-            </p>
-            <div class="briefing__badges" data-reveal>
-              <span class="badge"><i class="fa-solid fa-users"></i>Teams of 2 – 4</span>
-              <span class="badge"><i class="fa-solid fa-ticket"></i>Free entry</span>
-              <span class="badge"><i class="fa-solid fa-utensils"></i>Meals included</span>
-              <span class="badge"><i class="fa-solid fa-graduation-cap"></i>Any college</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="stats" data-reveal>
-          <div class="stat">
-            <span class="stat__num"><b data-count="24">0</b><small>h</small></span>
-            <span class="stat__label">Of non-stop building</span>
-          </div>
-          <div class="stat">
-            <span class="stat__num"><small>₹</small><b data-count="100" data-suffix="K">0</b></span>
-            <span class="stat__label">Total prize pool</span>
-          </div>
-          <div class="stat">
-            <span class="stat__num"><b data-count="4">0</b></span>
-            <span class="stat__label">Suit systems to choose from</span>
-          </div>
-          <div class="stat">
-            <span class="stat__num"><b data-count="500">0</b><small>+</small></span>
-            <span class="stat__label">Hackers on the floor</span>
-          </div>
+          <dl class="data data--stats">
+            <div><dt>Build time</dt><dd><b data-count="24">0</b> h</dd></div>
+            <div><dt>Prize pool</dt><dd>₹<b data-count="100">0</b>,000</dd></div>
+            <div><dt>Suit systems</dt><dd><b data-count="4">0</b> tracks</dd></div>
+            <div><dt>Recruits</dt><dd><b data-count="500">0</b>+ on the floor</dd></div>
+            <div><dt>Entry</dt><dd>Free · meals included</dd></div>
+            <div><dt>Eligibility</dt><dd>Any college, any year</dd></div>
+          </dl>
         </div>
       </div>
     </section>
 
-    <!-- ============ TRACKS ============ -->
-    <section class="section tracks" id="tracks">
-      <div class="container">
-        <div class="section__head">
-          <div>
-            <p class="hud-label" data-reveal>// 02 — Suit Systems</p>
-            <h2 class="display" data-reveal="words">Pick the system <span class="text-red">you'll build.</span></h2>
-          </div>
-          <p class="section__sub" data-reveal>
-            Every suit is a sum of its systems. Choose one track for your team. Cross-track hacks are welcome; you'll be judged in the one you register under.
-          </p>
+    <!-- ============ 03 SYSTEMS ============ -->
+    <section class="module" id="systems">
+      <header class="module__head" data-reveal><span><i>03</i>Suit systems</span><span>Select one per team</span></header>
+      <div class="panel" data-reveal>
+        <div class="list">
+          <article class="list__row">
+            <span class="list__code">SYS.01</span>
+            <div class="list__name"><h3>J.A.R.V.I.S.</h3><span>Artificial intelligence &amp; ML</span></div>
+            <p class="list__desc">Give the suit a brain. Agents, copilots, computer vision, voice, anything that learns faster than the person using it.</p>
+            <ul class="tags"><li>LLMs</li><li>Vision</li><li>Agents</li><li>MLOps</li></ul>
+          </article>
+          <article class="list__row">
+            <span class="list__code">SYS.02</span>
+            <div class="list__name"><h3>Repulsor</h3><span>Web &amp; app development</span></div>
+            <p class="list__desc">The interface that fires first. Products people can use on day one: web platforms, mobile apps, developer tools, real-time systems.</p>
+            <ul class="tags"><li>React</li><li>Flutter</li><li>APIs</li><li>Realtime</li></ul>
+          </article>
+          <article class="list__row">
+            <span class="list__code">SYS.03</span>
+            <div class="list__name"><h3>Arc Reactor</h3><span>Hardware, IoT &amp; sustainability</span></div>
+            <p class="list__desc">Power that runs the world. Embedded builds, sensor networks, robotics and clean-energy solutions with a physical demo on the table.</p>
+            <ul class="tags"><li>Embedded</li><li>Sensors</li><li>Robotics</li><li>Clean energy</li></ul>
+          </article>
+          <article class="list__row">
+            <span class="list__code">SYS.04</span>
+            <div class="list__name"><h3>Nanotech</h3><span>Open innovation &amp; fintech</span></div>
+            <p class="list__desc">Anything you can imagine, atom by atom. Blockchain, fintech, healthtech, edtech or a category that doesn't have a name yet.</p>
+            <ul class="tags"><li>Web3</li><li>Fintech</li><li>HealthTech</li><li>Wildcard</li></ul>
+          </article>
         </div>
+        <p class="panel__note">Cross-system builds are welcome. Judging happens in the system you register under. Systems can be switched at check-in.</p>
+      </div>
+    </section>
 
-        <div class="track-grid">
-          <article class="track" data-reveal data-tilt>
-            <div class="track__scan"></div>
-            <div class="track__top">
-              <span class="track__num">SYS.01</span>
-              <i class="fa-solid fa-brain track__icon" aria-hidden="true"></i>
-            </div>
-            <h3 class="track__name">J.A.R.V.I.S.</h3>
-            <p class="track__cat">Artificial Intelligence &amp; ML</p>
-            <p class="track__desc">Give the suit a brain. Agents, copilots, computer vision, voice, anything that learns faster than the person using it.</p>
-            <ul class="track__tags"><li>LLMs</li><li>Vision</li><li>Agents</li><li>MLOps</li></ul>
-          </article>
+    <!-- ============ 04 MISSION LOG ============ -->
+    <section class="module" id="log">
+      <header class="module__head" data-reveal><span><i>04</i>Mission log</span><span>All times IST</span></header>
+      <div class="panel" data-reveal>
+        <table class="table">
+          <thead><tr><th>Time</th><th>Event</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr class="table__day"><td colspan="3">Day 01 <em>//</em> Saturday, 14 November</td></tr>
+            <tr><td>09:00</td><td>Check-in &amp; badge sync</td><td>Collect your recruit badge, claim a table and meet your team. Solo hackers get matched here.</td></tr>
+            <tr><td>10:00</td><td>Opening keynote: Suit up</td><td>Tracks confirmed, judging criteria walked through, rules of engagement set.</td></tr>
+            <tr class="table__major"><td>11:00</td><td>Hacking begins</td><td>24:00:00 on the wall. Every workstation, mentor and coffee machine is live.</td></tr>
+            <tr><td>15:00</td><td>Mentor round I</td><td>Industry mentors rotate through the floor. Validate your idea before you're too deep to turn back.</td></tr>
+            <tr><td>20:00</td><td>Dinner &amp; lightning talks</td><td>Ten minutes, one slide, one sponsor. Then back to the bench.</td></tr>
+            <tr><td>00:00</td><td>Midnight fuel drop</td><td>Snacks, energy drinks and the first bugs that only appear after midnight.</td></tr>
+            <tr class="table__day"><td colspan="3">Day 02 <em>//</em> Sunday, 15 November</td></tr>
+            <tr><td>04:00</td><td>Mentor round II</td><td>The floor is quiet and the good ideas are strange. Mentors help you cut scope and ship.</td></tr>
+            <tr class="table__major"><td>10:00</td><td>Hands off keyboards</td><td>Submissions lock on the portal. Repo, demo video and a two-minute pitch.</td></tr>
+            <tr><td>11:00</td><td>Demos &amp; judging</td><td>Science-fair style. Judges walk the floor; every team demos live at its table.</td></tr>
+            <tr><td>14:00</td><td>Closing ceremony</td><td>Track winners, podium, cheques and the Mark I trophy. Then sleep.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-          <article class="track" data-reveal data-tilt>
-            <div class="track__scan"></div>
-            <div class="track__top">
-              <span class="track__num">SYS.02</span>
-              <i class="fa-solid fa-bolt track__icon" aria-hidden="true"></i>
-            </div>
-            <h3 class="track__name">Repulsor</h3>
-            <p class="track__cat">Web &amp; App Development</p>
-            <p class="track__desc">The interface that fires first. Products people can use on day one: web platforms, mobile apps, developer tools, real-time systems.</p>
-            <ul class="track__tags"><li>React</li><li>Flutter</li><li>APIs</li><li>Realtime</li></ul>
-          </article>
+    <!-- ============ 05 REWARDS ============ -->
+    <section class="module" id="rewards">
+      <header class="module__head" data-reveal><span><i>05</i>Rewards</span><span>Pool <em>//</em> ₹1,00,000</span></header>
+      <div class="panel" data-reveal>
+        <table class="table table--rewards">
+          <thead><tr><th>Rank</th><th>Title</th><th>Cash</th><th>Also</th></tr></thead>
+          <tbody>
+            <tr class="table__major"><td>01</td><td>MARK I Champion</td><td>₹50,000</td><td>Mark I trophy, fast-track internship interviews, 1-year GeeksforGeeks Premium</td></tr>
+            <tr><td>02</td><td>First runner-up</td><td>₹25,000</td><td>Medals, mentor office hours, 6-month GeeksforGeeks Premium</td></tr>
+            <tr><td>03</td><td>Second runner-up</td><td>₹10,000</td><td>Medals, swag kit, 3-month GeeksforGeeks Premium</td></tr>
+            <tr><td>04</td><td>Best in system × 4</td><td>₹3,750 each</td><td>One per suit system, sponsor goodies, feature on GFG SC channels</td></tr>
+          </tbody>
+        </table>
+        <p class="panel__note">Everyone who submits receives a participation certificate, swag and GeeksforGeeks course coupons. Cash prizes are paid to the team captain within 30 days.</p>
+      </div>
+    </section>
 
-          <article class="track" data-reveal data-tilt>
-            <div class="track__scan"></div>
-            <div class="track__top">
-              <span class="track__num">SYS.03</span>
-              <i class="fa-solid fa-microchip track__icon" aria-hidden="true"></i>
-            </div>
-            <h3 class="track__name">Arc Reactor</h3>
-            <p class="track__cat">Hardware, IoT &amp; Sustainability</p>
-            <p class="track__desc">Power that runs the world. Embedded builds, sensor networks, robotics and clean-energy solutions with a physical demo on the table.</p>
-            <ul class="track__tags"><li>Embedded</li><li>Sensors</li><li>Robotics</li><li>Clean Energy</li></ul>
-          </article>
-
-          <article class="track" data-reveal data-tilt>
-            <div class="track__scan"></div>
-            <div class="track__top">
-              <span class="track__num">SYS.04</span>
-              <i class="fa-solid fa-atom track__icon" aria-hidden="true"></i>
-            </div>
-            <h3 class="track__name">Nanotech</h3>
-            <p class="track__cat">Open Innovation &amp; Fintech</p>
-            <p class="track__desc">Anything you can imagine, atom by atom. Blockchain, fintech, healthtech, edtech or a category that doesn't have a name yet.</p>
-            <ul class="track__tags"><li>Web3</li><li>Fintech</li><li>HealthTech</li><li>Wildcard</li></ul>
-          </article>
+    <!-- ============ ALLIES ============ -->
+    <section class="module module--allies" id="allies">
+      <div class="panel" data-reveal>
+        <div class="allies">
+          <div><span>Title partner</span><b>Stark Industries</b></div>
+          <div><span>Powered by</span><b class="allies__gfg">GeeksforGeeks</b></div>
+          <div><span>Partners</span><b>Pym Technologies · Rand Enterprises · Wakanda Design Group · Baxter Foundation</b></div>
+          <div><span>Sponsor slots</span><b><a href="mailto:gfgsc@bennett.edu.in">gfgsc@bennett.edu.in</a></b></div>
         </div>
       </div>
     </section>
 
-    <!-- ============ TIMELINE ============ -->
-    <section class="section timeline" id="timeline">
-      <div class="container">
-        <div class="section__head">
-          <div>
-            <p class="hud-label" data-reveal>// 03 — Mission Log</p>
-            <h2 class="display" data-reveal="words">24 hours, <span class="text-cyan">minute by minute.</span></h2>
-          </div>
-          <p class="section__sub" data-reveal>
-            The clock starts at 11:00 on Saturday and does not stop. Mentors rotate through the floor twice; the second round happens at 4 AM for a reason.
-          </p>
-        </div>
-
-        <div class="tl" id="tl">
-          <div class="tl__line"><div class="tl__fill" id="tl-fill"></div></div>
-
-          <div class="tl__day" data-reveal><span>Day 01</span> Saturday, 14 Nov</div>
-
-          <div class="tl__item" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">09:00</time>
-            <div class="tl__body">
-              <h3>Check-in &amp; badge sync</h3>
-              <p>Collect your recruit badge, claim a table and meet your team. Solo hackers get matched here.</p>
-            </div>
-          </div>
-          <div class="tl__item" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">10:00</time>
-            <div class="tl__body">
-              <h3>Opening keynote: Suit Up</h3>
-              <p>Tracks revealed, judging criteria walked through, rules of engagement set.</p>
-            </div>
-          </div>
-          <div class="tl__item tl__item--major" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">11:00</time>
-            <div class="tl__body">
-              <h3>Hacking begins. MARK I clock starts.</h3>
-              <p>24:00:00 on the wall. Every workstation, mentor and coffee machine is live.</p>
-            </div>
-          </div>
-          <div class="tl__item" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">15:00</time>
-            <div class="tl__body">
-              <h3>Mentor round I</h3>
-              <p>Industry mentors rotate through the floor. Validate your idea before you're too deep to turn back.</p>
-            </div>
-          </div>
-          <div class="tl__item" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">20:00</time>
-            <div class="tl__body">
-              <h3>Dinner &amp; Expo lightning talks</h3>
-              <p>Ten minutes, one slide, one sponsor. Then back to the bench.</p>
-            </div>
-          </div>
-          <div class="tl__item" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">00:00</time>
-            <div class="tl__body">
-              <h3>Midnight fuel drop</h3>
-              <p>Snacks, energy drinks and the first bugs that only appear after midnight.</p>
-            </div>
-          </div>
-
-          <div class="tl__day" data-reveal><span>Day 02</span> Sunday, 15 Nov</div>
-
-          <div class="tl__item" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">04:00</time>
-            <div class="tl__body">
-              <h3>Mentor round II: the cave hours</h3>
-              <p>The floor is quiet and the good ideas are strange. Mentors help you cut scope and ship.</p>
-            </div>
-          </div>
-          <div class="tl__item tl__item--major" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">10:00</time>
-            <div class="tl__body">
-              <h3>Hands off keyboards</h3>
-              <p>Submissions lock on the portal. Repo, demo video and a two-minute pitch.</p>
-            </div>
-          </div>
-          <div class="tl__item" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">11:00</time>
-            <div class="tl__body">
-              <h3>Demos &amp; judging</h3>
-              <p>Science-fair style. Judges walk the floor; every team demos live at their table.</p>
-            </div>
-          </div>
-          <div class="tl__item" data-tl>
-            <div class="tl__dot"></div>
-            <time class="tl__time">14:00</time>
-            <div class="tl__body">
-              <h3>Closing ceremony &amp; MARK I Champion</h3>
-              <p>Track winners, podium, cheques and the Mark I trophy. Then sleep.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ REWARDS ============ -->
-    <section class="section rewards" id="rewards">
-      <div class="container">
-        <div class="section__head">
-          <div>
-            <p class="hud-label" data-reveal>// 04 — Rewards</p>
-            <h2 class="display" data-reveal="words">Prizes worth <span class="text-gold">suiting up for.</span></h2>
-          </div>
-          <p class="section__sub" data-reveal>
-            ₹1,00,000 in cash, plus internship interviews with our partners, GeeksforGeeks course access and swag for every participant who submits.
-          </p>
-        </div>
-
-        <div class="prize-grid">
-          <article class="prize prize--gold" data-reveal data-tilt>
-            <span class="prize__rank">01</span>
-            <div class="prize__badge"><i class="fa-solid fa-trophy" aria-hidden="true"></i></div>
-            <h3 class="prize__title">MARK I Champion</h3>
-            <p class="prize__amount">₹50,000</p>
-            <ul class="prize__perks">
-              <li>Mark I trophy &amp; certificates</li>
-              <li>Fast-track internship interviews</li>
-              <li>1-year GeeksforGeeks Premium</li>
-            </ul>
-          </article>
-
-          <article class="prize prize--silver" data-reveal data-tilt>
-            <span class="prize__rank">02</span>
-            <div class="prize__badge"><i class="fa-solid fa-medal" aria-hidden="true"></i></div>
-            <h3 class="prize__title">First Runner-up</h3>
-            <p class="prize__amount">₹25,000</p>
-            <ul class="prize__perks">
-              <li>Certificates &amp; medals</li>
-              <li>Mentor office hours</li>
-              <li>6-month GeeksforGeeks Premium</li>
-            </ul>
-          </article>
-
-          <article class="prize prize--bronze" data-reveal data-tilt>
-            <span class="prize__rank">03</span>
-            <div class="prize__badge"><i class="fa-solid fa-award" aria-hidden="true"></i></div>
-            <h3 class="prize__title">Second Runner-up</h3>
-            <p class="prize__amount">₹10,000</p>
-            <ul class="prize__perks">
-              <li>Certificates &amp; medals</li>
-              <li>Swag kit</li>
-              <li>3-month GeeksforGeeks Premium</li>
-            </ul>
-          </article>
-
-          <article class="prize prize--track" data-reveal data-tilt>
-            <span class="prize__rank">04</span>
-            <div class="prize__badge"><i class="fa-solid fa-star" aria-hidden="true"></i></div>
-            <h3 class="prize__title">Best in Track ×4</h3>
-            <p class="prize__amount">₹3,750 <small>each</small></p>
-            <ul class="prize__perks">
-              <li>One per suit system</li>
-              <li>Track sponsor goodies</li>
-              <li>Feature on GFG SC channels</li>
-            </ul>
-          </article>
-        </div>
-
-        <p class="rewards__note" data-reveal>
-          <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-          Everyone who submits gets a participation certificate, swag and GeeksforGeeks course coupons. Cash prizes are paid to the team captain within 30 days.
-        </p>
-      </div>
-    </section>
-
-    <!-- ============ SPONSORS ============ -->
-    <section class="section sponsors" id="sponsors">
-      <div class="container">
-        <p class="hud-label hud-label--center" data-reveal>// 05 — Allied Organizations</p>
-        <div class="sponsor-tiers">
-          <div class="sponsor-tier" data-reveal>
-            <span class="sponsor-tier__label">Title Partner</span>
-            <div class="sponsor-row sponsor-row--title">
-              <span class="sponsor sponsor--xl">Stark Industries</span>
-            </div>
-          </div>
-          <div class="sponsor-tier" data-reveal>
-            <span class="sponsor-tier__label">Powered by</span>
-            <div class="sponsor-row">
-              <span class="sponsor sponsor--lg sponsor--gfg"><i class="fa-solid fa-code"></i>GeeksforGeeks</span>
-            </div>
-          </div>
-          <div class="sponsor-tier" data-reveal>
-            <span class="sponsor-tier__label">Partners</span>
-            <div class="sponsor-row">
-              <span class="sponsor">Pym Technologies</span>
-              <span class="sponsor">Rand Enterprises</span>
-              <span class="sponsor">Wakanda Design Group</span>
-              <span class="sponsor">Baxter Foundation</span>
-            </div>
-          </div>
-        </div>
-        <p class="sponsors__cta" data-reveal>
-          Sponsor slots open. Request the partnership deck at <a href="mailto:gfgsc@bennett.edu.in" data-cursor="Mail">gfgsc@bennett.edu.in</a>
-        </p>
-      </div>
-    </section>
-
-    <!-- ============ FAQ ============ -->
-    <section class="section faq" id="faq">
-      <div class="container faq__grid">
-        <div class="faq__left">
-          <p class="hud-label" data-reveal>// 06 — Query Database</p>
-          <h2 class="display" data-reveal="words">Questions, <span class="text-cyan">answered.</span></h2>
-          <p class="section__sub" data-reveal>Can't find it here? Ask J.A.R.V.I.S. at <a href="mailto:gfgsc@bennett.edu.in" data-cursor="Mail">gfgsc@bennett.edu.in</a> or ping us on Instagram.</p>
-        </div>
-
-        <div class="faq__list" data-reveal>
+    <!-- ============ 06 QUERIES ============ -->
+    <section class="module" id="queries">
+      <header class="module__head" data-reveal><span><i>06</i>Query database</span><span>Press <kbd>/</kbd> to ask J.A.R.V.I.S.</span></header>
+      <div class="panel" data-reveal>
+        <div class="faq">
           <div class="faq__item">
-            <button class="faq__q" type="button" aria-expanded="false">
-              <span>Who can participate?</span><i aria-hidden="true"></i>
-            </button>
+            <button class="faq__q" type="button" aria-expanded="false"><span>Who can participate?</span><i aria-hidden="true"></i></button>
             <div class="faq__a"><div><p>Any undergraduate or postgraduate student from any college in India. Bring a valid college ID to check-in. Faculty and working professionals are welcome as mentors and judges, not as participants.</p></div></div>
           </div>
           <div class="faq__item">
-            <button class="faq__q" type="button" aria-expanded="false">
-              <span>What's the team size?</span><i aria-hidden="true"></i>
-            </button>
-            <div class="faq__a"><div><p>Two to four members. Registering solo? Choose team size 1 and we'll match you with other solo hackers at check-in based on your track.</p></div></div>
+            <button class="faq__q" type="button" aria-expanded="false"><span>What's the team size?</span><i aria-hidden="true"></i></button>
+            <div class="faq__a"><div><p>Two to four members. Registering solo? Choose team size 1 and we'll match you with other solo hackers at check-in based on your system.</p></div></div>
           </div>
           <div class="faq__item">
-            <button class="faq__q" type="button" aria-expanded="false">
-              <span>How much does it cost?</span><i aria-hidden="true"></i>
-            </button>
+            <button class="faq__q" type="button" aria-expanded="false"><span>How much does it cost?</span><i aria-hidden="true"></i></button>
             <div class="faq__a"><div><p>Nothing. MARK I is free. Meals, snacks, caffeine, Wi-Fi, power and a place to nap are all covered. Travel is on you.</p></div></div>
           </div>
           <div class="faq__item">
-            <button class="faq__q" type="button" aria-expanded="false">
-              <span>Can we start building before the event?</span><i aria-hidden="true"></i>
-            </button>
+            <button class="faq__q" type="button" aria-expanded="false"><span>Can we start building before the event?</span><i aria-hidden="true"></i></button>
             <div class="faq__a"><div><p>Ideas, research and wireframes: yes. Code: no. You may use open-source libraries, public APIs and boilerplate. Anything written before 11:00 on Saturday is disqualified, and we check commit history.</p></div></div>
           </div>
           <div class="faq__item">
-            <button class="faq__q" type="button" aria-expanded="false">
-              <span>What should I bring?</span><i aria-hidden="true"></i>
-            </button>
+            <button class="faq__q" type="button" aria-expanded="false"><span>What should I bring?</span><i aria-hidden="true"></i></button>
             <div class="faq__a"><div><p>Laptop, charger, college ID, any hardware your project needs and a hoodie. The floor gets cold at 4 AM.</p></div></div>
           </div>
           <div class="faq__item">
-            <button class="faq__q" type="button" aria-expanded="false">
-              <span>How is judging done?</span><i aria-hidden="true"></i>
-            </button>
+            <button class="faq__q" type="button" aria-expanded="false"><span>How is judging done?</span><i aria-hidden="true"></i></button>
             <div class="faq__a"><div><p>Five criteria, weighted equally: innovation, technical difficulty, design and UX, real-world impact, and the live demo. Judges walk the floor science-fair style; every team demos at its own table.</p></div></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ REGISTER ============ -->
-    <section class="section register" id="register">
-      <div class="register__glow" aria-hidden="true"></div>
-      <div class="container register__grid">
-        <div class="register__left">
-          <p class="hud-label" data-reveal>// 07 — Recruitment</p>
-          <h2 class="display display--xl" data-reveal="words">Suit <span class="text-red">up.</span></h2>
-          <p class="lead" data-reveal>Registration closes 7 November or when 500 seats fill, whichever comes first. One form per team.</p>
-          <ul class="register__points" data-reveal>
-            <li><i class="fa-solid fa-check"></i>Confirmation email within 48 hours</li>
-            <li><i class="fa-solid fa-check"></i>Team changes allowed until 10 November</li>
-            <li><i class="fa-solid fa-check"></i>Track can be switched at check-in</li>
-          </ul>
+    <!-- ============ 07 RECRUIT ============ -->
+    <section class="module" id="recruit">
+      <header class="module__head" data-reveal><span><i>07</i>Recruitment</span><span class="status"><i class="dot dot--gold"></i>Accepting</span></header>
+      <div class="panel" data-reveal>
+        <div class="split split--form">
+          <div class="split__main">
+            <h2 class="h2">Suit up.</h2>
+            <p class="lead">Registration closes 7 November or when 500 seats fill, whichever comes first. One form per team.</p>
+            <dl class="data">
+              <div><dt>Confirmation</dt><dd>Email within 48 hours</dd></div>
+              <div><dt>Team changes</dt><dd>Allowed until 10 November</dd></div>
+              <div><dt>System changes</dt><dd>Allowed at check-in</dd></div>
+              <div><dt>Contact</dt><dd><a href="mailto:gfgsc@bennett.edu.in">gfgsc@bennett.edu.in</a></dd></div>
+            </dl>
+          </div>
+
+          <form class="form" id="reg-form" novalidate>
+            <div class="field">
+              <label for="team">Team name</label>
+              <input id="team" name="team" type="text" placeholder="e.g. Cave Dwellers" required minlength="2" autocomplete="organization" />
+              <span class="field__err">Give your team a name.</span>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="captain">Team captain</label>
+                <input id="captain" name="captain" type="text" placeholder="Full name" required minlength="2" autocomplete="name" />
+                <span class="field__err">We need a name.</span>
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@college.edu" required autocomplete="email" />
+                <span class="field__err">Enter a valid email.</span>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="size">Team size</label>
+                <div class="select"><select id="size" name="size" required>
+                  <option value="" disabled selected>Select</option>
+                  <option value="1">1 — match me</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                </select></div>
+                <span class="field__err">Pick a size.</span>
+              </div>
+              <div class="field">
+                <label for="track">Suit system</label>
+                <div class="select"><select id="track" name="track" required>
+                  <option value="" disabled selected>Select</option>
+                  <option value="jarvis">SYS.01 J.A.R.V.I.S. — AI &amp; ML</option>
+                  <option value="repulsor">SYS.02 Repulsor — Web &amp; app</option>
+                  <option value="arc">SYS.03 Arc Reactor — Hardware &amp; IoT</option>
+                  <option value="nano">SYS.04 Nanotech — Open innovation</option>
+                </select></div>
+                <span class="field__err">Pick a system.</span>
+              </div>
+            </div>
+            <div class="field field--check">
+              <label class="check">
+                <input type="checkbox" id="agree" name="agree" required />
+                <span class="check__box"></span>
+                <span>I agree to the code of conduct and confirm every member is a currently enrolled student.</span>
+              </label>
+              <span class="field__err">You'll need to agree to continue.</span>
+            </div>
+            <button class="btn btn--primary btn--block" type="submit" id="submit-btn">
+              <span class="btn__text">Submit registration</span>
+              <span class="btn__loading">Transmitting…</span>
+            </button>
+            <p class="form__fine">No spam. One confirmation email, one reminder the week of the event.</p>
+
+            <div class="form__success" id="form-success" aria-live="polite">
+              <span class="eyebrow">Registration logged</span>
+              <h3>Welcome to the initiative, <span id="success-name">recruit</span>.</h3>
+              <p class="form__success-id">Recruit ID <b id="success-id">MK1-0000</b></p>
+              <p class="copy">Check your inbox within 48 hours. Bring this ID to check-in on 14 November.</p>
+              <button type="button" class="btn btn--sm" id="reset-btn">Register another team</button>
+            </div>
+          </form>
         </div>
-
-        <form class="form" id="reg-form" novalidate data-reveal>
-          <div class="form__corner form__corner--tl"></div>
-          <div class="form__corner form__corner--tr"></div>
-          <div class="form__corner form__corner--bl"></div>
-          <div class="form__corner form__corner--br"></div>
-
-          <div class="form__head">
-            <span class="hud-label">Recruit intake form</span>
-            <span class="form__status"><span class="hud__dot"></span>Accepting</span>
-          </div>
-
-          <div class="field">
-            <label for="team">Team name</label>
-            <input id="team" name="team" type="text" placeholder="e.g. Cave Dwellers" required minlength="2" autocomplete="organization" />
-            <span class="field__err">Give your team a name.</span>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="captain">Team captain</label>
-              <input id="captain" name="captain" type="text" placeholder="Full name" required minlength="2" autocomplete="name" />
-              <span class="field__err">We need a name.</span>
-            </div>
-            <div class="field">
-              <label for="email">Email</label>
-              <input id="email" name="email" type="email" placeholder="you@college.edu" required autocomplete="email" />
-              <span class="field__err">Enter a valid email.</span>
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="size">Team size</label>
-              <div class="select">
-                <select id="size" name="size" required>
-                  <option value="" disabled selected>Select</option>
-                  <option value="1">1 — match me</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                </select>
-              </div>
-              <span class="field__err">Pick a size.</span>
-            </div>
-            <div class="field">
-              <label for="track">Preferred track</label>
-              <div class="select">
-                <select id="track" name="track" required>
-                  <option value="" disabled selected>Select</option>
-                  <option value="jarvis">J.A.R.V.I.S. — AI &amp; ML</option>
-                  <option value="repulsor">Repulsor — Web &amp; App</option>
-                  <option value="arc">Arc Reactor — Hardware &amp; IoT</option>
-                  <option value="nano">Nanotech — Open Innovation</option>
-                </select>
-              </div>
-              <span class="field__err">Pick a track.</span>
-            </div>
-          </div>
-
-          <div class="field field--check">
-            <label class="check">
-              <input type="checkbox" id="agree" name="agree" required />
-              <span class="check__box"></span>
-              <span>I agree to the code of conduct and confirm every member is a currently enrolled student.</span>
-            </label>
-            <span class="field__err">You'll need to agree to continue.</span>
-          </div>
-
-          <button class="btn btn--primary btn--block magnetic" type="submit" id="submit-btn" data-cursor="Send">
-            <span class="btn__text">Initiate registration</span>
-            <span class="btn__loading">Transmitting<i></i><i></i><i></i></span>
-            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-          </button>
-          <p class="form__fine">No spam. One confirmation email, one reminder the week of the event.</p>
-
-          <div class="form__success" id="form-success" aria-live="polite">
-            <div class="form__success-ring">
-              <svg viewBox="0 0 100 100" aria-hidden="true">
-                <circle cx="50" cy="50" r="44" />
-                <path d="M30 52 L44 66 L72 36" />
-              </svg>
-            </div>
-            <p class="hud-label">Registration logged</p>
-            <h3>Welcome to the initiative, <span id="success-name">recruit</span>.</h3>
-            <p class="form__success-id">Recruit ID <b id="success-id">MK1-0000</b></p>
-            <p>Check your inbox within 48 hours. Bring this ID to check-in on 14 November.</p>
-            <button type="button" class="btn btn--ghost btn--sm" id="reset-btn">Register another team</button>
-          </div>
-        </form>
       </div>
     </section>
+
+    <footer class="foot">
+      <span>© 2026 GeeksforGeeks Student Chapter, Bennett University</span>
+      <span>Designed &amp; built by Dhairya. Fan-made concept; not affiliated with Marvel or Disney.</span>
+      <span class="foot__social">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+      </span>
+    </footer>
   </main>
 
-  <!-- ============ FOOTER ============ -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__top">
-        <div class="footer__brand">
-          <a href="#top" class="nav__brand" data-cursor="Top">
-            <svg class="nav__mark" viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
-              <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
-              <circle cx="20" cy="20" r="12" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 3"/>
-              <circle cx="20" cy="20" r="5" fill="currentColor"/>
-            </svg>
-            <span class="nav__brand-text">MARK<em>I</em></span>
-          </a>
-          <p>A 24-hour hackathon by the GeeksforGeeks Student Chapter, Bennett University. 14 – 15 November 2026, Greater Noida.</p>
-        </div>
-
-        <div class="footer__col">
-          <span class="footer__h">Navigate</span>
-          <a href="#briefing">Briefing</a>
-          <a href="#tracks">Tracks</a>
-          <a href="#timeline">Timeline</a>
-          <a href="#rewards">Rewards</a>
-          <a href="#faq">FAQ</a>
-        </div>
-
-        <div class="footer__col">
-          <span class="footer__h">Contact</span>
-          <a href="mailto:gfgsc@bennett.edu.in">gfgsc@bennett.edu.in</a>
-          <a href="https://maps.google.com/?q=Bennett+University" target="_blank" rel="noopener">Bennett University, Greater Noida</a>
-          <div class="footer__social">
-            <a href="#" aria-label="Instagram" data-cursor="Insta"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" aria-label="LinkedIn" data-cursor="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-            <a href="#" aria-label="X" data-cursor="X"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#" aria-label="GitHub" data-cursor="GitHub"><i class="fa-brands fa-github"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer__giant" aria-hidden="true">MARK I</div>
-
-      <div class="footer__bottom">
-        <span>© 2026 GeeksforGeeks Student Chapter, Bennett University</span>
-        <span>Designed &amp; built by Dhairya. Fan-made concept; not affiliated with Marvel or Disney.</span>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ============ J.A.R.V.I.S. ============ -->
-  <div class="jarvis" id="jarvis">
-    <canvas class="jarvis__orb" id="jarvis-orb" width="112" height="112" aria-hidden="true"></canvas>
-    <p class="jarvis__text" aria-live="polite"><span class="jarvis__name">J.A.R.V.I.S.</span><span id="jarvis-msg"></span></p>
-    <button class="jarvis__open" id="jarvis-open" type="button" data-cursor="Talk">Talk <kbd>/</kbd></button>
+  <!-- ============ STATUS LINE ============ -->
+  <div class="statusbar" id="jarvis">
+    <canvas class="statusbar__orb" id="jarvis-orb" width="64" height="64" aria-hidden="true"></canvas>
+    <p class="statusbar__text" aria-live="polite"><span class="statusbar__name">J.A.R.V.I.S.</span><span id="jarvis-msg"></span></p>
+    <span class="statusbar__meta">28.4501° N, 77.5859° E <em>//</em> Greater Noida</span>
+    <button class="statusbar__open" id="jarvis-open" type="button">Command line <kbd>/</kbd></button>
   </div>
 
   <div class="term" id="term" aria-hidden="true" role="dialog" aria-label="J.A.R.V.I.S. command line">
-    <div class="term__head">
-      <span><span class="hud__dot"></span>J.A.R.V.I.S. // COMMAND LINE</span>
-      <button type="button" id="term-close" aria-label="Close command line">×</button>
-    </div>
+    <div class="term__head"><span><i class="dot"></i>J.A.R.V.I.S. <em>//</em> command line</span><button type="button" id="term-close" aria-label="Close command line">×</button></div>
     <div class="term__log" id="term-log"></div>
-    <form class="term__form" id="term-form" autocomplete="off">
-      <span>&gt;</span>
-      <input id="term-input" type="text" placeholder="type 'help' or ask a question" aria-label="Command" />
-    </form>
+    <form class="term__form" id="term-form" autocomplete="off"><span>&gt;</span><input id="term-input" type="text" placeholder="type 'help' or ask a question" aria-label="Command" /></form>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
   <script src="js/hud.js"></script>
   <script src="js/main.js" defer></script>
   <script src="js/jarvis.js" defer></script>

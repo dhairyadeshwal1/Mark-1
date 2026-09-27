@@ -1,6 +1,6 @@
-# MARK I — Build your first suit.
+# MARK I — Recruitment terminal
 
-A Marvel-inspired event landing page for **MARK I**, a 24-hour hackathon by the
+A Marvel-themed event site for **MARK I**, a 24-hour hackathon by the
 GeeksforGeeks Student Chapter, Bennett University. Built for the Junior Core
 Technical Team Round 1 task (Marvel × Web Design).
 
@@ -11,86 +11,78 @@ Technical Team Round 1 task (Marvel × Web Design).
 ## Concept
 
 Tony Stark built the Mark I in a cave, in a weekend, out of scraps. That is a
-hackathon. The whole site leans on that one idea: **"Build your first suit."**
+hackathon. The site takes that one idea, **"Build your first suit."**, and
+presents the event the way Stark Industries would: not as a poster, but as a
+working recruitment terminal run by J.A.R.V.I.S.
 
-Instead of pasting Marvel posters onto a template, the page is designed as a
-Stark Industries HUD. Every visual on the page is original: the 3D J.A.R.V.I.S. core is
-modelled in Three.js, the HUD chrome is CSS and SVG, and the typography does the
-cinematic work. Nothing is copyrighted Marvel artwork, which keeps the site
-clean to publish and makes it feel crafted rather than collaged.
+So it is designed as an interface rather than a landing page. A fixed top bar
+holds the module tabs and a live clock. Every section is a bordered panel with
+a small monospace label, and the content is laid out as data rows and tables:
+an event file, a mission briefing with a stats column, four suit systems as a
+list, the schedule as a mission log, rewards as a table, a query database and a
+recruit intake form. One accent colour, no decoration that does not carry
+information.
 
-The event language carries the metaphor throughout:
+The only living element is J.A.R.V.I.S. himself, modelled in Three.js after
+his Age of Ultron form: a golden sphere of thousands of glowing nodes with
+orbital bands and rings, framed in the overview panel with a telemetry strip.
+He also materializes inside the boot sequence, sits as a small orb in the
+status line, comments on each module as you scroll, and answers questions in
+a command line.
 
-| Section          | Framed as              |
-| ---------------- | ---------------------- |
-| Preloader        | J.A.R.V.I.S. boot sequence |
-| About            | Mission Briefing       |
-| Tracks           | Suit Systems (J.A.R.V.I.S., Repulsor, Arc Reactor, Nanotech) |
-| Schedule         | Mission Log            |
-| Prizes           | Rewards                |
-| Sponsors         | Allied Organizations (fictional Marvel corporations) |
-| FAQ              | Query Database         |
-| Registration     | Recruitment: "Suit up." |
+| Section | Module |
+| --- | --- |
+| Hero | 01 Overview: J.A.R.V.I.S. core + event file |
+| About | 02 Mission briefing |
+| Tracks | 03 Suit systems |
+| Schedule | 04 Mission log |
+| Prizes | 05 Rewards |
+| Sponsors | Allied organisations |
+| FAQ | 06 Query database |
+| Registration | 07 Recruitment |
 
-## What's interactive
+## Interactions
 
-- **J.A.R.V.I.S. suit-initialization boot**: a full-screen HUD with rotating
-  tick rings, a gold progress ring, phase readouts, a timestamped system log
-  typing in, six suit-system gauges, a voice-pattern waveform with a typed
-  greeting and a hex memory map, ending in a targeting lock, a flash and a
-  visor-split reveal. Shortened on repeat visits in the same session,
-  skippable with ESC.
-- **J.A.R.V.I.S. status bar** with a live voice waveform that comments on
-  each section as you scroll.
-- **J.A.R.V.I.S. command line** (press `/` or tap Talk): type `help`,
-  `register`, `tracks`, `prizes`, `overload` or a plain question and get typed
-  replies that also navigate the page.
-- **Targeting HUD** around J.A.R.V.I.S.: rotating rings, corner brackets and
-  live telemetry chips that drift like real sensors. Cards get snap-in
-  targeting brackets on hover ("TARGET LOCKED") and headings glitch on reveal.
-- **Optional synthesized audio** (nav toggle): hover blips, confirmation tones
-  and an overload alarm generated with the Web Audio API, no sound files.
-- **J.A.R.V.I.S. himself, in 3D** (Three.js + Unreal bloom), modelled after
-  his Age of Ultron form: a hot amber core inside layered shells of thousands
-  of glowing nodes, streaks between neighbours, clustered orbital bands, thin
-  great-circle rings and drifting light dust. He tilts toward the cursor,
-  spins faster when you scroll, and pauses rendering when off-screen. A 2D
-  version materializes in the boot core and a small orb lives in the status bar.
-- **Easter egg:** tap J.A.R.V.I.S. three times to overload him.
-- **Custom HUD cursor** with a lagging reticle ring and contextual labels
-  (desktop only).
-- **Lenis smooth scroll** wired into GSAP ScrollTrigger.
-- **Scroll choreography:** hero parallax, word-by-word heading reveals,
-  animated stat counters, a timeline whose line "charges" as you scroll and
-  lights each milestone, nav that hides on scroll down.
-- **Magnetic buttons**, 3D-tilting cards with spotlight and scan-line sweep,
-  live countdown to the event, live HUD clock, marquee ticker.
-- **Registration form** with inline validation, transmitting state, and a HUD
-  success panel that issues a recruit ID.
-- **Accessibility and fallbacks:** semantic HTML, keyboard focus states,
-  `prefers-reduced-motion` support (smooth scroll off, animations instant,
-  core idles), CSS-only core if WebGL is unavailable, readable without JS.
-- **Fully responsive** from 360px phones to ultrawide desktops.
+- **Suit-initialization boot**: rotating tick rings, a gold progress ring,
+  phase readouts, a timestamped system log typing in, six suit-system gauges
+  and J.A.R.V.I.S. materializing in the core, ending with a lock, a flash and
+  a visor-split reveal. Shortened on repeat visits in the same session; ESC
+  skips it.
+- **J.A.R.V.I.S. in 3D** (Three.js + Unreal bloom): hot amber core, layered
+  node shells, streaks between neighbours, clustered orbital bands, thin
+  great-circle rings and drifting dust. Tilts toward the cursor, spins up on
+  scroll, pauses rendering when off-screen. Tap three times to overload.
+- **Status line**: a J.A.R.V.I.S. orb and a typed message that changes per
+  module.
+- **Command line** (press `/` or use the button): `help`, `register`,
+  `systems`, `log`, `prizes`, `venue`, `overload` and plain questions, with
+  typed replies that also navigate the page.
+- **Live data**: clock, session timer, countdown to the event, telemetry
+  values that drift like real sensors, stat counters.
+- **Queries accordion** and a **registration form** with inline validation, a
+  transmitting state and a recruit ID on success.
+- **Optional synthesized audio** (top-bar toggle): hover blips, confirmation
+  tones and an overload alarm from the Web Audio API, no sound files.
+- **Fallbacks**: `prefers-reduced-motion` respected, CSS-only core when WebGL
+  is unavailable, readable without JavaScript, responsive from 360px up.
 
 ## Tech stack
 
-- HTML5, CSS3 (custom properties, grid, `color-mix`, masks), vanilla JavaScript
-- [GSAP 3.12](https://gsap.com/) + ScrollTrigger — animation and scroll choreography
-- [Lenis 1.1](https://lenis.darkroom.engineering/) — smooth scrolling
-- [Three.js r160](https://threejs.org/) — J.A.R.V.I.S. core, with `UnrealBloomPass`
-- Web Audio API — opt-in synthesized HUD sounds, no audio files
+- HTML5, CSS3 (custom properties, grid), vanilla JavaScript
+- [GSAP 3.12](https://gsap.com/) for the boot timeline only
+- [Three.js r160](https://threejs.org/) with `UnrealBloomPass` for J.A.R.V.I.S.
+- Web Audio API for opt-in synthesized sounds
 - No build step. Open `index.html` or serve the folder.
 
 ## Project structure
 
 ```
 .
-├── index.html          # page structure and content
-├── css/styles.css      # design system, components, responsive rules
-├── css/hud.css         # J.A.R.V.I.S. layer: boot, rings, targeting, terminal
-├── js/hud.js           # HUD toolkit: SVG ring builder, waveform, typewriter, synth audio
-├── js/main.js          # boot sequence, scroll, reveals, cursor, forms
-├── js/jarvis.js        # status bar, command line, telemetry, targeting brackets
+├── index.html          # modules, panels and content
+├── css/ui.css          # the whole design system
+├── js/hud.js           # toolkit: SVG ring builder, 2D orb, typewriter, synth audio
+├── js/main.js          # boot sequence, navigation, clock, countdown, reveals, form
+├── js/jarvis.js        # status line, command line, telemetry, audio toggle
 ├── js/jarvis3d.js      # Three.js J.A.R.V.I.S. core (ES module)
 ├── assets/favicon.svg
 └── docs/plans/         # design document
@@ -99,7 +91,6 @@ The event language carries the metaphor throughout:
 ## Run locally
 
 ```bash
-# any static server works
 python -m http.server 5173
 # then open http://127.0.0.1:5173
 ```
@@ -109,8 +100,8 @@ python -m http.server 5173
 1. Push this folder to a GitHub repository (branch `main`).
 2. Repository **Settings → Pages → Build and deployment**: Source = "Deploy from
    a branch", Branch = `main`, folder = `/ (root)`. Save.
-3. The site goes live at `https://<username>.github.io/<repo>/` within a minute.
-   All asset paths are relative, so it works from a sub-path.
+3. The site goes live at `https://<username>.github.io/<repo>/` within a
+   minute. All asset paths are relative, so it works from a sub-path.
 
 ## Hooking up real registrations
 
@@ -122,15 +113,14 @@ or your own endpoint; the `data` object already contains every field.
 
 | Resource | Use |
 | --- | --- |
-| Google Fonts: [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue), [Rajdhani](https://fonts.google.com/specimen/Rajdhani), [Inter](https://fonts.google.com/specimen/Inter), [Orbitron](https://fonts.google.com/specimen/Orbitron), [Share Tech Mono](https://fonts.google.com/specimen/Share+Tech+Mono) | Display, HUD labels, body, numerals and terminal typography |
+| Google Fonts: [Rajdhani](https://fonts.google.com/specimen/Rajdhani), [Share Tech Mono](https://fonts.google.com/specimen/Share+Tech+Mono), [Inter](https://fonts.google.com/specimen/Inter) | Interface, data and reading typography |
 | [Font Awesome 6.5.2](https://fontawesome.com/) | Icons |
-| [GSAP 3.12.5](https://gsap.com/) | Animation, ScrollTrigger |
-| [Lenis 1.1.18](https://github.com/darkroomengineering/lenis) | Smooth scroll |
+| [GSAP 3.12.5](https://gsap.com/) | Boot timeline |
 | [Three.js 0.160.0](https://threejs.org/) | 3D J.A.R.V.I.S. core and bloom |
-| SVG `feTurbulence` | Film-grain overlay (generated inline, no image files) |
+| Inline SVG and canvas | Favicon, boot rings, 2D orb |
 
 No stock photography or Marvel imagery is used. All graphics are original CSS,
-SVG and Three.js geometry.
+SVG, canvas and Three.js geometry.
 
 ## Credits
 
@@ -138,5 +128,6 @@ Designed and built by **Dhairya** for the GeeksforGeeks Student Chapter,
 Bennett University.
 
 Fan-made concept for a student event. Not affiliated with, endorsed by, or
-connected to Marvel Entertainment or The Walt Disney Company. Iron Man, Stark
-Industries and related names are trademarks of their respective owners.
+connected to Marvel Entertainment or The Walt Disney Company. Iron Man,
+J.A.R.V.I.S., Stark Industries and related names are trademarks of their
+respective owners.

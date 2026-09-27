@@ -13,7 +13,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 const canvas = document.getElementById('jarvis-core');
-const hero = canvas && canvas.closest('.hero');
+const hero = canvas && canvas.closest('.core-view'); // the panel viewport the sphere fills
 const fail = () => window.dispatchEvent(new CustomEvent('reactor:fail'));
 const EDGE = 1.3; // visual radius of the sphere in world units
 
@@ -209,34 +209,18 @@ function init() {
     const h = hero.clientHeight || window.innerHeight;
     renderer.setSize(w, h, false);
     composer.setSize(w, h);
-    bloom.setSize(Math.round(w * 0.5), Math.round(h * 0.5));
+    // Half-resolution bloom is fine on large panels; small ones need full res or the glow turns blocky.
+    const bloomScale = w < 900 ? 1 : 0.5;
+    bloom.setSize(Math.round(w * bloomScale), Math.round(h * bloomScale));
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
 
+    // Centre the sphere and fit it to the shorter side of the panel viewport.
     const halfH = camera.position.z * Math.tan((camera.fov * Math.PI) / 360);
     const halfW = halfH * camera.aspect;
-    const pxPerUnit = h / (2 * halfH);
-    if (narrow()) {
-      // Phones and tablets: pin the core near the top of the hero, sized by the
-      // viewport, and tell CSS where its bottom edge is so the copy starts below it.
-      const vh = window.innerHeight;
-      const radiusPx = Math.min(w * 0.42, vh * 0.22, 230);
-      const centerPx = Math.min(radiusPx * 1.45, vh * 0.34);
-      jarvis.scale.setScalar(radiusPx / pxPerUnit / EDGE);
-      jarvis.position.set(0, halfH - centerPx / pxPerUnit, 0);
-      hero.style.setProperty('--reactor-bottom', `${Math.round(centerPx + radiusPx)}px`);
-      hero.style.setProperty('--reactor-x', `${Math.round(w / 2)}px`);
-      hero.style.setProperty('--reactor-y', `${Math.round(centerPx)}px`);
-      hero.style.setProperty('--reactor-r', `${Math.round(radiusPx)}px`);
-    } else {
-      const s = Math.min(1.2, (halfH * 0.9) / EDGE);
-      jarvis.scale.setScalar(s);
-      jarvis.position.set(halfW * 0.4, 0, 0);
-      hero.style.removeProperty('--reactor-bottom');
-      hero.style.setProperty('--reactor-x', `${Math.round(w * 0.7)}px`);
-      hero.style.setProperty('--reactor-y', `${Math.round(h / 2)}px`);
-      hero.style.setProperty('--reactor-r', `${Math.round(s * EDGE * pxPerUnit)}px`);
-    }
+    const s = (Math.min(halfW, halfH) * (narrow() ? 0.8 : 0.84)) / EDGE;
+    jarvis.scale.setScalar(s);
+    jarvis.position.set(0, 0, 0);
     // Point sprites do not scale with the group, so shrink them with the sphere
     // (1.2 is the desktop reference scale) to keep the node structure readable.
     const k = Math.max(0.35, jarvis.scale.x / 1.2);
