@@ -122,6 +122,7 @@
   const HUD = window.MK1;
   const seenBoot = (() => { try { return sessionStorage.getItem('mk1-boot') === '1'; } catch (_) { return false; } })();
   let bootDone = false;
+  let stopBootFx = null;
 
   const heroIntro = () => {
     if (!hasGSAP) { window.dispatchEvent(new CustomEvent('mk1:booted')); return; }
@@ -151,7 +152,7 @@
     if (HUD && HUD.audio.enabled) HUD.audio.confirm();
     const d = fast ? 0.6 : 1;
     boot.classList.add('is-locked');
-    const tl = gsap.timeline({ onComplete: () => boot.remove() });
+    const tl = gsap.timeline({ onComplete: () => { boot.remove(); if (stopBootFx) stopBootFx(); } });
     tl.to('.boot__flash', { opacity: 0.92, duration: 0.14, ease: 'power2.in' }, 0.28 * d)
       .to('.boot__flash', { opacity: 0, duration: 0.6, ease: 'power2.out' })
       .to('.boot__stage', { opacity: 0, scale: 1.14, duration: 0.55 * d, ease: 'power3.in' }, 0.32 * d)
@@ -181,7 +182,6 @@
       { type: 'arcs', r: 102, segs: 3, gap: 42, w: 4, spin: 'cw', speed: 9, cls: 'ring--bright' },
       { type: 'circle', r: 80, w: 1, dash: '1 5', opacity: 0.5, spin: 'ccw', speed: 36 },
       { type: 'brackets', r: 64, size: 14, w: 2, cls: 'ring--brackets' },
-      { type: 'circle', r: 46, w: 0, fill: 'url(#coreGlow)', cls: 'ring--core' },
     ]);
     const ringFill = $('#boot-ring-fill');
     const ringLen = ringFill ? parseFloat(ringFill.dataset.len) : 0;
@@ -230,9 +230,13 @@
     };
 
     const counter = { v: 0 };
+    // J.A.R.V.I.S. materializes in the core as the sequence progresses
+    const orbEl = $('#boot-orb');
+    const stopOrb = orbEl ? HUD.orb(orbEl, { radius: 0.235, dot: 1.25, get: () => ({ alpha: Math.max(0.1, counter.v / 100), speed: 1 + counter.v / 50 }) }) : () => {};
+    stopBootFx = () => { stopWave(); stopOrb(); };
     const mem = { n: 0 };
     let done = 0;
-    const tl = gsap.timeline({ onComplete: () => { stopWave(); finishBoot(false); } });
+    const tl = gsap.timeline({ onComplete: () => finishBoot(false) });
 
     // percent + progress ring + phases
     tl.to(counter, {
@@ -283,7 +287,7 @@
 
     if (HUD.audio.enabled) HUD.audio.sweep();
 
-    const skip = () => { if (bootDone) return; tl.kill(); stopWave(); finishBoot(true); };
+    const skip = () => { if (bootDone) return; tl.kill(); finishBoot(true); };
     const skipBtn = $('#boot-skip');
     skipBtn && skipBtn.addEventListener('click', skip);
     const onKey = (e) => { if (e.key === 'Escape') { skip(); document.removeEventListener('keydown', onKey); } };
@@ -613,7 +617,7 @@
      Reactor events (from reactor.js)
   ------------------------------------------------------------------ */
   window.addEventListener('reactor:overload', () => {
-    toast('<b>J.A.R.V.I.S.:</b> Reactor output at 400%. Sir, I would advise against that.', 4200);
+    toast('<b>J.A.R.V.I.S.:</b> Core output at 400%. Sir, I would advise against that.', 4200);
   });
   window.addEventListener('reactor:fail', () => {
     const hero = $('.hero');

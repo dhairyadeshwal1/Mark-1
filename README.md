@@ -14,7 +14,7 @@ Tony Stark built the Mark I in a cave, in a weekend, out of scraps. That is a
 hackathon. The whole site leans on that one idea: **"Build your first suit."**
 
 Instead of pasting Marvel posters onto a template, the page is designed as a
-Stark Industries HUD. Every visual on the page is original: the 3D arc reactor is
+Stark Industries HUD. Every visual on the page is original: the 3D J.A.R.V.I.S. core is
 modelled in Three.js, the HUD chrome is CSS and SVG, and the typography does the
 cinematic work. Nothing is copyrighted Marvel artwork, which keeps the site
 clean to publish and makes it feel crafted rather than collaged.
@@ -45,15 +45,18 @@ The event language carries the metaphor throughout:
 - **J.A.R.V.I.S. command line** (press `/` or tap Talk): type `help`,
   `register`, `tracks`, `prizes`, `overload` or a plain question and get typed
   replies that also navigate the page.
-- **Targeting HUD** around the reactor: rotating rings, corner brackets and
+- **Targeting HUD** around J.A.R.V.I.S.: rotating rings, corner brackets and
   live telemetry chips that drift like real sensors. Cards get snap-in
   targeting brackets on hover ("TARGET LOCKED") and headings glitch on reveal.
 - **Optional synthesized audio** (nav toggle): hover blips, confirmation tones
   and an overload alarm generated with the Web Audio API, no sound files.
-- **Live 3D arc reactor** (Three.js + Unreal bloom). Ten copper-wrapped coils,
-  housing rings, HUD tick ring and drifting particles. It tilts toward the
-  cursor, spins faster when you scroll, and pauses rendering when off-screen.
-- **Easter egg:** tap the reactor three times to overload it.
+- **J.A.R.V.I.S. himself, in 3D** (Three.js + Unreal bloom), modelled after
+  his Age of Ultron form: a hot amber core inside layered shells of thousands
+  of glowing nodes, streaks between neighbours, clustered orbital bands, thin
+  great-circle rings and drifting light dust. He tilts toward the cursor,
+  spins faster when you scroll, and pauses rendering when off-screen. A 2D
+  version materializes in the boot core and a small orb lives in the status bar.
+- **Easter egg:** tap J.A.R.V.I.S. three times to overload him.
 - **Custom HUD cursor** with a lagging reticle ring and contextual labels
   (desktop only).
 - **Lenis smooth scroll** wired into GSAP ScrollTrigger.
@@ -66,7 +69,7 @@ The event language carries the metaphor throughout:
   success panel that issues a recruit ID.
 - **Accessibility and fallbacks:** semantic HTML, keyboard focus states,
   `prefers-reduced-motion` support (smooth scroll off, animations instant,
-  reactor idles), CSS-only reactor if WebGL is unavailable, readable without JS.
+  core idles), CSS-only core if WebGL is unavailable, readable without JS.
 - **Fully responsive** from 360px phones to ultrawide desktops.
 
 ## Tech stack
@@ -74,7 +77,7 @@ The event language carries the metaphor throughout:
 - HTML5, CSS3 (custom properties, grid, `color-mix`, masks), vanilla JavaScript
 - [GSAP 3.12](https://gsap.com/) + ScrollTrigger — animation and scroll choreography
 - [Lenis 1.1](https://lenis.darkroom.engineering/) — smooth scrolling
-- [Three.js r160](https://threejs.org/) — arc reactor, with `UnrealBloomPass`
+- [Three.js r160](https://threejs.org/) — J.A.R.V.I.S. core, with `UnrealBloomPass`
 - Web Audio API — opt-in synthesized HUD sounds, no audio files
 - No build step. Open `index.html` or serve the folder.
 
@@ -88,7 +91,7 @@ The event language carries the metaphor throughout:
 ├── js/hud.js           # HUD toolkit: SVG ring builder, waveform, typewriter, synth audio
 ├── js/main.js          # boot sequence, scroll, reveals, cursor, forms
 ├── js/jarvis.js        # status bar, command line, telemetry, targeting brackets
-├── js/reactor.js       # Three.js arc reactor (ES module)
+├── js/jarvis3d.js      # Three.js J.A.R.V.I.S. core (ES module)
 ├── assets/favicon.svg
 └── docs/plans/         # design document
 ```
@@ -123,7 +126,7 @@ or your own endpoint; the `data` object already contains every field.
 | [Font Awesome 6.5.2](https://fontawesome.com/) | Icons |
 | [GSAP 3.12.5](https://gsap.com/) | Animation, ScrollTrigger |
 | [Lenis 1.1.18](https://github.com/darkroomengineering/lenis) | Smooth scroll |
-| [Three.js 0.160.0](https://threejs.org/) | 3D reactor and bloom |
+| [Three.js 0.160.0](https://threejs.org/) | 3D J.A.R.V.I.S. core and bloom |
 | SVG `feTurbulence` | Film-grain overlay (generated inline, no image files) |
 
 No stock photography or Marvel imagery is used. All graphics are original CSS,

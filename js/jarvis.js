@@ -68,9 +68,9 @@
   ------------------------------------------------------------------ */
   const bar = $('#jarvis');
   const msgEl = $('#jarvis-msg');
-  const waveEl = $('#jarvis-wave');
+  const orbEl = $('#jarvis-orb');
   let speaking = 0;
-  if (waveEl) HUD.wave(waveEl, () => (speaking ? 1 : 0.16));
+  if (orbEl) HUD.orb(orbEl, { points: 320, core: 120, ringPts: 80, radius: 0.4, dot: 2.6, get: () => ({ alpha: speaking ? 1 : 0.85, speed: speaking ? 3.4 : 1 }) });
 
   let current = '';
   let sayToken = 0;
@@ -152,10 +152,10 @@
     team: () => print('Teams of two to four. Solo recruits are matched at check-in.'),
     cost: () => print('Free. Meals, caffeine and Wi-Fi included. Sleep is not.'),
     overload: () => {
-      const c = document.getElementById('reactor');
+      const c = document.getElementById('jarvis-core');
       lenisScroll('top');
       setTimeout(() => { for (let i = 0; i < 3; i++) c && c.dispatchEvent(new MouseEvent('click', { bubbles: true })); }, 900);
-      return print('Pushing the reactor to 400%. For the record, sir, I advised against this.');
+      return print('Pushing my core to 400%. For the record, sir, I advised against this.');
     },
     jarvis: () => print('At your service.'),
     hello: () => print('Good evening. How may I assist?'),

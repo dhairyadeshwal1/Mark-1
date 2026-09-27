@@ -129,6 +129,103 @@
     return () => { running = false; };
   }
 
+  /**
+   * 2D J.A.R.V.I.S. orb: a golden point sphere with core and tilted orbital
+   * rings, drawn on a plain canvas so it is available before Three.js loads.
+   * opts.get() returns { alpha: 0..1 (how materialized), speed: multiplier }.
+   */
+  function orb(canvas, opts = {}) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return () => {};
+    const N = opts.points || 720;
+    const golden = Math.PI * (3 - Math.sqrt(5));
+    const pts = [];
+    for (let i = 0; i < N; i++) {
+      const y = 1 - (i / (N - 1)) * 2;
+      const r = Math.sqrt(1 - y * y);
+      const th = golden * i;
+      pts.push([Math.cos(th) * r + (Math.random() - 0.5) * 0.06, y + (Math.random() - 0.5) * 0.06, Math.sin(th) * r + (Math.random() - 0.5) * 0.06]);
+    }
+    const core = [];
+    for (let i = 0; i < (opts.core || 240); i++) {
+      const u = Math.random() * 2 - 1;
+      const ph = Math.random() * Math.PI * 2;
+      const r = 0.45 * Math.cbrt(Math.random());
+      const s = Math.sqrt(1 - u * u);
+      core.push([r * s * Math.cos(ph), r * u, r * s * Math.sin(ph)]);
+    }
+    const rings = [
+      { r: 1.1, tx: 0.9, tz: 0.3, speed: 0.9 },
+      { r: 1.2, tx: -0.6, tz: 1.1, speed: -0.6 },
+      { r: 1.3, tx: 0.2, tz: -0.8, speed: 0.45 },
+    ];
+    const RP = opts.ringPts || 150;
+    let t = 0;
+    let running = true;
+    const rotate = (p, rY, rX) => {
+      const x1 = p[0] * Math.cos(rY) + p[2] * Math.sin(rY);
+      const z1 = -p[0] * Math.sin(rY) + p[2] * Math.cos(rY);
+      const y1 = p[1] * Math.cos(rX) - z1 * Math.sin(rX);
+      const z2 = p[1] * Math.sin(rX) + z1 * Math.cos(rX);
+      return [x1, y1, z2];
+    };
+    const draw = () => {
+      if (!running) return;
+      requestAnimationFrame(draw);
+      const g = opts.get ? opts.get() : { alpha: 1, speed: 1 };
+      const alpha = Math.max(0, Math.min(1, g.alpha === undefined ? 1 : g.alpha));
+      t += 0.016 * (g.speed || 1);
+      const W = canvas.width;
+      const H = canvas.height;
+      const cx = W / 2;
+      const cy = H / 2;
+      const R = Math.min(W, H) * (opts.radius || 0.36);
+      const DOT = opts.dot || 1;
+      ctx.clearRect(0, 0, W, H);
+      if (alpha <= 0.01) return;
+      ctx.globalCompositeOperation = 'lighter';
+      const rotY = t * 0.5;
+      const rotX = 0.35 + Math.sin(t * 0.3) * 0.15;
+      const dot = (p, size, a, green) => {
+        const d = 1 / (1 + p[2] * 0.25);
+        ctx.fillStyle = `rgba(255,${green},80,${a.toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(cx + p[0] * R * d, cy + p[1] * R * d, size * d * DOT, 0, 6.2832);
+        ctx.fill();
+      };
+      const visible = Math.floor(pts.length * alpha);
+      for (let i = 0; i < visible; i++) {
+        const p = rotate(pts[i], rotY, rotX);
+        dot(p, R * 0.012, (0.32 + (p[2] + 1) * 0.28) * alpha, 170);
+      }
+      for (let i = 0; i < core.length; i++) {
+        const p = rotate(core[i], -rotY * 0.7, rotX);
+        dot(p, R * 0.016, 0.55 * alpha, 205);
+      }
+      rings.forEach((rg, k) => {
+        for (let i = 0; i < RP; i++) {
+          const a0 = (i / RP) * Math.PI * 2 + t * rg.speed;
+          const p0 = [Math.cos(a0) * rg.r, 0, Math.sin(a0) * rg.r];
+          const y1 = -p0[2] * Math.sin(rg.tx);
+          const z1 = p0[2] * Math.cos(rg.tx);
+          const x2 = p0[0] * Math.cos(rg.tz) - y1 * Math.sin(rg.tz);
+          const y2 = p0[0] * Math.sin(rg.tz) + y1 * Math.cos(rg.tz);
+          const p = rotate([x2, y2, z1], rotY * 0.2, rotX);
+          const seg = Math.sin(a0 * 3 + k) > -0.2 ? 1 : 0.22;
+          dot(p, R * 0.01, 0.5 * seg * alpha, 150);
+        }
+      });
+      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 0.95);
+      grd.addColorStop(0, `rgba(255,190,90,${(0.32 * alpha).toFixed(3)})`);
+      grd.addColorStop(1, 'rgba(255,140,40,0)');
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'source-over';
+    };
+    draw();
+    return () => { running = false; };
+  }
+
   /** Typewriter. Resolves when done. */
   function type(el, text, opts = {}) {
     const cps = opts.cps || 45;
@@ -182,5 +279,5 @@
     alarm() { this.tone(520, 0.3, 'square', 0.03, 240); },
   };
 
-  window.MK1 = { buildRings, arcPath, polar, wave, type, audio };
+  window.MK1 = { buildRings, arcPath, polar, wave, orb, type, audio };
 })();

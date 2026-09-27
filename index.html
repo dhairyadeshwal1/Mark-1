@@ -42,6 +42,7 @@
       <div class="boot__scan"></div>
 
       <div class="boot__core">
+        <canvas class="boot__orb" id="boot-orb" width="520" height="520" aria-hidden="true"></canvas>
         <svg class="boot__rings" id="boot-rings" viewBox="0 0 420 420" aria-hidden="true">
           <defs>
             <radialGradient id="coreGlow">
@@ -166,7 +167,7 @@
   <main>
     <!-- ============ HERO ============ -->
     <section class="hero" id="top">
-      <canvas class="hero__canvas" id="reactor" aria-label="Interactive 3D arc reactor" data-cursor="Tap ×3"></canvas>
+      <canvas class="hero__canvas" id="jarvis-core" aria-label="Interactive 3D J.A.R.V.I.S. core" data-cursor="Tap ×3"></canvas>
       <div class="hero__fallback" aria-hidden="true"></div>
       <div class="hero__grid" aria-hidden="true"></div>
       <div class="hero__vignette" aria-hidden="true"></div>
@@ -780,7 +781,7 @@
 
   <!-- ============ J.A.R.V.I.S. ============ -->
   <div class="jarvis" id="jarvis">
-    <canvas class="jarvis__wave" id="jarvis-wave" width="168" height="52" aria-hidden="true"></canvas>
+    <canvas class="jarvis__orb" id="jarvis-orb" width="112" height="112" aria-hidden="true"></canvas>
     <p class="jarvis__text" aria-live="polite"><span class="jarvis__name">J.A.R.V.I.S.</span><span id="jarvis-msg"></span></p>
     <button class="jarvis__open" id="jarvis-open" type="button" data-cursor="Talk">Talk <kbd>/</kbd></button>
   </div>
@@ -803,6 +804,6 @@
   <script src="js/hud.js"></script>
   <script src="js/main.js" defer></script>
   <script src="js/jarvis.js" defer></script>
-  <script type="module" src="js/reactor.js"></script>
+  <script type="module" src="js/jarvis3d.js"></script>
 </body>
 </html>
