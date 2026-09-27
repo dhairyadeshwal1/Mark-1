@@ -50,8 +50,15 @@ a command line.
   skips it.
 - **J.A.R.V.I.S. in 3D** (Three.js + Unreal bloom): hot amber core, layered
   node shells, streaks between neighbours, clustered orbital bands, thin
-  great-circle rings and drifting dust. Tilts toward the cursor, spins up on
-  scroll, pauses rendering when off-screen. Tap three times to overload.
+  great-circle rings and drifting dust. Pauses rendering when off-screen.
+- **He responds to being handled.** Hover and the nodes under the cursor
+  light up while he turns to face you. Drag to spin him with inertia. Tap to
+  send a ripple across the surface. Hold to charge (he swells, brightens and
+  the telemetry climbs toward 400%), release to discharge a pulse, hold on and
+  he overloads. Three taps also overload. Pinch or ctrl+wheel to zoom. The
+  panel readout reports IDLE, TRACKING, MANUAL, CHARGING, DISCHARGE or
+  OVERLOAD, and he answers each action in the status line. The node effects
+  run in a custom point shader, so they cost nothing on the CPU.
 - **Status line**: a J.A.R.V.I.S. orb and a typed message that changes per
   module.
 - **Command line** (press `/` or use the button): `help`, `register`,

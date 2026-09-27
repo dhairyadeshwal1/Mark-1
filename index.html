@@ -109,13 +109,15 @@
       <div class="panel panel--core" data-reveal>
         <div class="panel__head"><span>J.A.R.V.I.S. <em>//</em> core</span><span class="status"><i class="dot"></i>Online</span></div>
         <div class="core-view">
-          <canvas id="jarvis-core" aria-label="J.A.R.V.I.S. core visualisation. Tap three times to overload." data-cursor="Tap ×3"></canvas>
+          <canvas id="jarvis-core" aria-label="J.A.R.V.I.S. core. Drag to rotate, tap to ping, hold to charge, tap three times to overload."></canvas>
           <div class="core-fallback" aria-hidden="true"></div>
+          <span class="core-state" id="core-state" aria-hidden="true">IDLE</span>
+          <span class="core-hint" id="core-hint" aria-hidden="true"><span>Drag · rotate</span><span>Tap · ping</span><span>Hold · charge</span><span>Tap ×3 · overload</span></span>
         </div>
         <div class="telemetry">
-          <div><span>Power</span><b data-jit="100" data-spread="0.6" data-unit="%"></b></div>
-          <div><span>Output</span><b data-jit="3.0" data-spread="0.12" data-dec="2" data-unit=" GJ/s"></b></div>
-          <div><span>Stability</span><b data-jit="99.8" data-spread="0.3" data-unit="%"></b></div>
+          <div><span>Power</span><b data-jit="100" data-spread="0.6" data-unit="%" data-react="power"></b></div>
+          <div><span>Output</span><b data-jit="3.0" data-spread="0.12" data-dec="2" data-unit=" GJ/s" data-react="output"></b></div>
+          <div><span>Stability</span><b data-jit="99.8" data-spread="0.3" data-unit="%" data-react="stability"></b></div>
           <div><span>Session</span><b id="uptime">00:00:00</b></div>
         </div>
       </div>

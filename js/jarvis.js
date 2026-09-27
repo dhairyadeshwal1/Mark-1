@@ -11,24 +11,38 @@
   const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
   const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
-  /* ---------- telemetry drift ---------- */
+  /* ---------- telemetry: drifts like a sensor, climbs with the core ---------- */
   const jitters = $$('[data-jit]');
   const drift = () => {
+    const st = (window.__mk1 && window.__mk1.state) || {};
+    const ch = st.charge || 0;
+    const ov = Math.min(1, (st.overload || 0) / 14);
     jitters.forEach((el) => {
       const base = parseFloat(el.dataset.jit);
       const spread = parseFloat(el.dataset.spread || '0.4');
       const dec = parseInt(el.dataset.dec || '1', 10);
-      el.textContent = (base + (Math.random() - 0.5) * spread).toFixed(dec) + (el.dataset.unit || '');
+      let v = base;
+      const react = el.dataset.react;
+      if (react === 'power') v = base + ch * 300 + ov * 300;
+      else if (react === 'output') v = base * (1 + ch * 3 + ov * 3);
+      else if (react === 'stability') v = base - ch * 45 - ov * 60;
+      const noise = spread * (1 + (ch + ov) * 6);
+      el.textContent = (v + (Math.random() - 0.5) * noise).toFixed(dec) + (el.dataset.unit || '');
     });
   };
   drift();
-  setInterval(drift, 900);
+  setInterval(drift, 400);
 
   /* ---------- status line ---------- */
   const bar = $('#jarvis');
   const msgEl = $('#jarvis-msg');
   const orbEl = $('#jarvis-orb');
   let speaking = 0;
+  const setSpeaking = (on) => {
+    if (speaking === on) return;
+    speaking = on;
+    window.dispatchEvent(new CustomEvent('jarvis:voice', { detail: { on: !!on } }));
+  };
   if (orbEl) HUD.orb(orbEl, { points: 260, core: 100, ringPts: 70, radius: 0.42, dot: 2.4, get: () => ({ alpha: speaking ? 1 : 0.85, speed: speaking ? 3.2 : 1 }) });
 
   let current = '';
@@ -37,9 +51,31 @@
     if (!msgEl || text === current) return;
     current = text;
     const token = ++sayToken;
-    speaking = 1;
-    HUD.type(msgEl, text, { cps: 60, onChar: () => HUD.audio.tick() }).then(() => { if (token === sayToken) speaking = 0; });
+    setSpeaking(1);
+    HUD.type(msgEl, text, { cps: 60, onChar: () => HUD.audio.tick() }).then(() => { if (token === sayToken) setSpeaking(0); });
   };
+
+  /* ---------- he answers when you handle him ---------- */
+  const REACT = {
+    press: ['Yes, sir?', 'I can feel that, you know.', 'Careful with the core, sir.'],
+    spin: ['I am not a globe, sir.', 'Dizzying. Do carry on.', 'Rotating on request. Delightful.'],
+    ping: ['Ping acknowledged.', 'Still here, sir.', 'Yes?'],
+    charge: ['Charging the core. This is inadvisable.', 'Building charge. Do keep a safe distance.', 'Sir, the core was not designed for this.'],
+    discharge: ['Discharged. Do mind the furniture.', 'Well. That was unnecessary.', 'Energy vented. Stability restored.'],
+    overload: ['Core output at 400%. Sir, I would advise against that.', 'Overload. I did warn you, sir.'],
+  };
+  const ALWAYS = new Set(['charge', 'discharge', 'overload']);
+  let lastReact = -1e9;
+  window.addEventListener('jarvis:interact', (e) => {
+    const kind = e.detail && e.detail.kind;
+    const pool = REACT[kind];
+    if (!pool) return;
+    const now = performance.now();
+    if (!ALWAYS.has(kind) && now - lastReact < 7000) return;
+    lastReact = now;
+    current = '';
+    say(pool[Math.floor(Math.random() * pool.length)]);
+  });
 
   const LINES = {
     overview: 'Systems online. Welcome to the Mark I initiative, recruit.',
@@ -78,8 +114,8 @@
     log.appendChild(line);
     log.scrollTop = log.scrollHeight;
     if (who === 'user') { line.textContent = text; return Promise.resolve(); }
-    speaking = 1;
-    return HUD.type(line, text, { cps: 65, onChar: () => { HUD.audio.tick(); log.scrollTop = log.scrollHeight; } }).then(() => { speaking = 0; });
+    setSpeaking(1);
+    return HUD.type(line, text, { cps: 65, onChar: () => { HUD.audio.tick(); log.scrollTop = log.scrollHeight; } }).then(() => { setSpeaking(0); });
   };
 
   const COMMANDS = {
@@ -105,7 +141,7 @@
     cost: () => print('Free. Meals, caffeine and Wi-Fi included. Sleep is not.'),
     overload: () => {
       go('overview');
-      setTimeout(() => { const c = document.getElementById('jarvis-core'); for (let i = 0; i < 3; i++) c && c.dispatchEvent(new MouseEvent('click', { bubbles: true })); }, 900);
+      setTimeout(() => window.dispatchEvent(new CustomEvent('jarvis:overload')), 900);
       return print('Pushing my core to 400%. For the record, sir, I advised against this.');
     },
     jarvis: () => print('At your service.'),

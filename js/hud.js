@@ -277,6 +277,9 @@
     confirm() { this.tone(660, 0.14, 'sine', 0.05, 1320); },
     sweep() { this.tone(160, 1.3, 'sawtooth', 0.025, 1500); this.tone(55, 1.5, 'sine', 0.06, 220); },
     alarm() { this.tone(520, 0.3, 'square', 0.03, 240); },
+    ping() { this.tone(1300, 0.14, 'sine', 0.045, 520); },
+    chargeTick(level) { this.tone(240 + level * 1100, 0.07, 'square', 0.014 + level * 0.02); },
+    discharge() { this.tone(1400, 0.45, 'sawtooth', 0.05, 90); this.tone(70, 0.6, 'sine', 0.08, 30); },
   };
 
   window.MK1 = { buildRings, arcPath, polar, wave, orb, type, audio };
