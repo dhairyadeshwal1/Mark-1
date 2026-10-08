@@ -4,7 +4,7 @@ A Marvel-themed event site for **MARK I**, a 24-hour hackathon by the
 GeeksforGeeks Student Chapter, Bennett University. Built for the Junior Core
 Technical Team Round 1 task (Marvel × Web Design).
 
-**Live site:** _add your GitHub Pages URL here_
+**Live site:** https://github.com/dhairyadeshwal1/Mark-1/
 
 ---
 
